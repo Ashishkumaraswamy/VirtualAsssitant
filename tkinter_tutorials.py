@@ -33,10 +33,15 @@ engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
 
-engine.say("HI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!".format(
+def first_run():
+    engine.say("HI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!".format(
     datetime.datetime.now().strftime('%I:%M %p')))
+    engine.runAndWait()
+    
+# engine.say("HI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!".format(
+#     datetime.datetime.now().strftime('%I:%M %p')))
 
-engine.runAndWait()
+# engine.runAndWait()
 
 
 def talk(text):
@@ -129,7 +134,8 @@ def run_alexa():
         exit()
     else:
         talk('Please say the command again.')
+    return command
 
 
-while(True):
-    run_alexa()
+# while(True):
+#     run_alexa()
