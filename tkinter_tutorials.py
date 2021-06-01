@@ -95,7 +95,7 @@ def first_1():
             print('listening...')
             talk('listening...')
             voice = listener.listen(source)
-            print(voice.get_raw_data())
+            #print(voice.get_raw_data())
             command = listener.recognize_google(
                 voice, key=None, language='en-US', show_all=True)
     except:
