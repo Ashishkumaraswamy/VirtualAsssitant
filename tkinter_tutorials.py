@@ -1,47 +1,25 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun May 30 11:02:31 2021
-
-@author: Sabareesh
+@author: Ashish
 """
-from tkinter import *
-from PIL import ImageTk, Image
-
-# root = Tk()
-# root.title("J.A.R.V.I.S")
-# root.geometry("1920x1080")
-# root.overrideredirect(True)
-# img = Image.open("E:/Virtual Assistant/jarvis.jpg")
-# img = img.resize((1920, 1080))
-# bg = ImageTk.PhotoImage(img)
-# label1 = Label(root, image=bg)
-# label1.place(x=0, y=0)
-# label2 = Label(root, text="J.A.R.V.I.S", font=("Georgia", 20))
-# label2.pack(pady=30)
-# root.mainloop()
-
 
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
 import datetime
-# import wikipedia
-# import pyjokes
+# import ashishui as ui
 
 listener = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
 
+
 def first_run():
     engine.say("HI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!".format(
-    datetime.datetime.now().strftime('%I:%M %p')))
+        datetime.datetime.now().strftime('%I:%M %p')))
     engine.runAndWait()
-    
-# engine.say("HI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!".format(
-#     datetime.datetime.now().strftime('%I:%M %p')))
-
-# engine.runAndWait()
 
 
 def talk(text):
@@ -100,42 +78,58 @@ def first_1():
             print('listening...')
             talk('listening...')
             voice = listener.listen(source)
-            #print(voice.get_raw_data())
+            # print(voice.get_raw_data())
             command = listener.recognize_google(
                 voice, key=None, language='en-US', show_all=True)
+            if command != []:
+                command = command['alternative'][0]['transcript']
+                command = command.lower()
+                msg['You'] = command
+                talk(command)
+            else:
+                command = "No command recieved"
+                talk(command)
     except:
         pass
     return command
 
 
 def run_alexa():
+    msg = {}
     command = first_1()
-    if command != []:
-        command = command['alternative'][0]['transcript']
-        command = command.lower()
-        talk(command)
-    else:
-        command = "No command recieved"
-        talk(command)
+
+    if command == "No command recieved":
         return
     if 'play' in command:
         song = command.replace('play', '')
         talk('playing ' + song)
+        reply = 'playing ' + song
+        msg['Jarvis'] = reply
         pywhatkit.playonyt(song)
     elif 'search' in command:
         inp = command.replace('search', '')
         talk('searching ' + inp)
+        reply = 'searching ' + inp
+        msg['Jarvis'] = reply
         pywhatkit.search(inp)
     elif 'time' in command:
         time = datetime.datetime.now().strftime('%I:%M %p')
+        reply = 'Current time is ' + time
+        msg['Jarvis'] = reply
         talk('Current time is ' + time)
     elif 'rest' in command or 'sleep' in command:
         talk('Okay Guys I will just take a nap, Call me whenever u need my help')
+        reply = 'Okay Guys I will just take a nap, Call me whenever u need my help'
+        msg['Jarvis'] = reply
         exit()
     else:
         talk('Please say the command again.')
-    return command
+
+    return msg
 
 
-# while(True):
-#     run_alexa()
+# if __name__ == "__main__":
+#     app = ui.ChatApplication()
+#     while(True):
+#         app.run()
+#         run_alexa(app)
