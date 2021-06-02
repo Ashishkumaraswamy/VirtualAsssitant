@@ -5,13 +5,34 @@ import tkinter_tutorials as tt
 posy = 0.2
 
 
+def changesatus(text):
+    statuslabel['text'] = text
+
+
 def myfucntion():
     canvas.configure(scrollregion=canvas.bbox("all"))
 
 
+def get_va_msg():
+    print('Here')
+    msg = tt.first_1()
+    show_msg(msg)
+    root.update()
+    changesatus("Processing..")
+    root.update()
+    msg = tt.run_alexa(msg['msg'])
+    show_msg(msg)
+    changesatus("Listening..")
+    root.update()
+    root.update()
+
+
 def show_msg(msg):
+    print("Here")
     global posy
+    print(msg)
     if msg['name'] == "You":
+        print("Inside Hre")
         newmsg = Label(second_frame, text=msg['msg'], font=(
             "Georgia", 12), wraplength=150, anchor="w")
         newmsg.place(relx=0.6, rely=posy, relwidth=0.32, relheight=0.1)
@@ -57,7 +78,7 @@ canvas.config(yscrollcommand=scrollbar.set)
 
 second_frame = Frame(canvas, height=600, width=500,
                      bg='#11023E')
-second_frame.bind("<Configure>", myfucntion)
+# second_frame.bind("<Configure>", myfucntion)
 canvas.create_window((0, 0), window=second_frame, anchor="nw")
 img = Image.open("avatar.jpg")
 img = img.resize((50, 50))
@@ -66,22 +87,31 @@ avatar = Label(second_frame, image=avatarimg, anchor=E,
                height=50, width=50, padx=5, pady=5, bg="#11023E")
 avatar.place(rely=0.04, relx=0.85)
 
-msg = "Hello This is Ashish.How are you?"
-dictionary = {"msg": msg, "name": "Jarvis"}
-show_msg(dictionary)
-dictionary = {"msg": msg, "name": "You"}
-show_msg(dictionary)
-dictionary = {"msg": msg, "name": "You"}
-show_msg(dictionary)
-dictionary = {"msg": msg, "name": "Jarvis"}
-show_msg(dictionary)
-dictionary = {"msg": msg, "name": "Jarvis"}
-show_msg(dictionary)
-dictionary = {"msg": msg, "name": "Jarvis"}
-show_msg(dictionary)
-dictionary = {"msg": msg, "name": "You"}
-show_msg(dictionary)
-dictionary = {"msg": msg, "name": "You"}
-show_msg(dictionary)
-
+# msg = "Hello This is Ashish.How are you?"
+# dictionary = {"msg": msg, "name": "Jarvis"}
+# show_msg(dictionary)
+# dictionary = {"msg": msg, "name": "You"}
+# show_msg(dictionary)
+# dictionary = {"msg": msg, "name": "You"}
+# show_msg(dictionary)
+# dictionary = {"msg": msg, "name": "Jarvis"}
+# show_msg(dictionary)
+# dictionary = {"msg": msg, "name": "Jarvis"}
+# show_msg(dictionary)
+# dictionary = {"msg": msg, "name": "Jarvis"}
+# show_msg(dictionary)
+# dictionary = {"msg": msg, "name": "You"}
+# show_msg(dictionary)
+# dictionary = {"msg": msg, "name": "You"}
+# show_msg(dictionary)
+# self.window.after(1000, tt.first_run)
+#         while(True):
+#             self.window.after(2000, self.va)
+#             self.window.update()
+#         self.window.mainloop()
+root.update()
+tt.first_run()
+while(True):
+    root.update()
+    get_va_msg()
 root.mainloop()

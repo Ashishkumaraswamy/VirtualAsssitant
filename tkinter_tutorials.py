@@ -84,48 +84,41 @@ def first_1():
             if command != []:
                 command = command['alternative'][0]['transcript']
                 command = command.lower()
-                msg['You'] = command
                 talk(command)
             else:
                 command = "No command recieved"
                 talk(command)
     except:
         pass
-    return command
+    return dict({"name": "You", "msg": command})
 
 
-def run_alexa():
-    msg = {}
-    command = first_1()
-
+def run_alexa(command):
     if command == "No command recieved":
-        return
-    if 'play' in command:
+        reply = "No command recieved"
+    elif 'play' in command:
         song = command.replace('play', '')
         talk('playing ' + song)
         reply = 'playing ' + song
-        msg['Jarvis'] = reply
         pywhatkit.playonyt(song)
     elif 'search' in command:
         inp = command.replace('search', '')
         talk('searching ' + inp)
         reply = 'searching ' + inp
-        msg['Jarvis'] = reply
         pywhatkit.search(inp)
     elif 'time' in command:
         time = datetime.datetime.now().strftime('%I:%M %p')
         reply = 'Current time is ' + time
-        msg['Jarvis'] = reply
         talk('Current time is ' + time)
     elif 'rest' in command or 'sleep' in command:
         talk('Okay Guys I will just take a nap, Call me whenever u need my help')
         reply = 'Okay Guys I will just take a nap, Call me whenever u need my help'
-        msg['Jarvis'] = reply
         exit()
     else:
         talk('Please say the command again.')
+        reply = 'Please say the command again.'
 
-    return msg
+    return dict({"name": "Jarvis", "msg": reply})
 
 
 # if __name__ == "__main__":
