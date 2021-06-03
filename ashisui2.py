@@ -44,7 +44,7 @@ def show_msg(msg):
     if msg['name'] == "You":
         print("Inside Hre")
         newmsg = Label(second_frame, text=msg['msg'], font=(
-            "Georgia", 12), wraplength=150, borderwidth=2)
+            "Georgia"), wraplength=150, borderwidth=2)
         newmsg.corner_radius = 5
         newmsg.border_width = 2
         newmsg.place(relx=0.6+width_change*0.005, rely=posy, relwidth=0.33-width_change*0.005,
@@ -52,7 +52,7 @@ def show_msg(msg):
         posy += 0.04+(height+1)*0.032
     else:
         newmsg = Label(second_frame, text=msg['msg'], font=(
-            "Georgia", 12), wraplength=150, borderwidth=2)
+            "Georgia"), wraplength=150, borderwidth=2)
         newmsg.corner_radius = 5
         newmsg.border_width = 2
         newmsg.place(relx=0.04, rely=posy, relwidth=0.33-width_change*0.0005,
@@ -107,7 +107,7 @@ avatarimg = ImageTk.PhotoImage(img)
 avatar = Label(second_frame, image=avatarimg, anchor=E,
                height=50, width=50, padx=5, pady=5, bg="gray26")
 avatar.place(rely=0.04, relx=0.85)
-
+root.resizable(0,0)
 # msg = "Hello This is Ashish.How are you?adasdas sdsadsa sfasfa sfaafasfa "
 # dictionary = {"msg": msg, "name": "Jarvis"}
 # dictionary1 = {"msg": "Hello", "name": "Jarvis"}

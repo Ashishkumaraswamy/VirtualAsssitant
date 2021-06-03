@@ -8,6 +8,8 @@ import speech_recognition as sr
 import pyttsx3
 import pywhatkit
 import datetime
+import pyjokes
+import wikipedia
 # import ashishui as ui
 
 listener = sr.Recognizer()
@@ -110,6 +112,11 @@ def run_alexa(command):
         time = datetime.datetime.now().strftime('%I:%M %p')
         reply = 'Current time is ' + time
         # talk('Current time is ' + time)
+    elif 'tell me about' in command:
+         person = command.replace('tell me about', '')
+         reply = wikipedia.summary(person, 1)
+    elif 'joke' in command:
+        reply = pyjokes.get_joke()
     elif 'rest' in command or 'sleep' in command:
         # talk('Okay Guys I will just take a nap, Call me whenever u need my help')
         reply = 'Okay Guys I will just take a nap, Call me whenever u need my help'
