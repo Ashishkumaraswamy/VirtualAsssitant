@@ -76,7 +76,7 @@ def first_1():
     try:
         with sr.Microphone() as source:
             print('listening...')
-            talk('listening...')
+            # talk('listening...')
             voice = listener.listen(source)
             # print(voice.get_raw_data())
             command = listener.recognize_google(
@@ -84,10 +84,8 @@ def first_1():
             if command != []:
                 command = command['alternative'][0]['transcript']
                 command = command.lower()
-                talk(command)
             else:
-                command = "No command recieved"
-                talk(command)
+                command = ""
     except:
         pass
     return dict({"name": "You", "msg": command})
