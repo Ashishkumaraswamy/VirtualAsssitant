@@ -17,9 +17,12 @@ engine.setProperty('voice', voices[0].id)
 
 
 def first_run():
-    engine.say("HI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!".format(
-        datetime.datetime.now().strftime('%I:%M %p')))
+    welcome_msg = "HI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!".format(
+        datetime.datetime.now().strftime('%I:%M %p'))
+    # engine.say("HI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!".format(
+    #     datetime.datetime.now().strftime('%I:%M %p')))
     engine.runAndWait()
+    return dict({'name': 'Jarvis', 'msg': welcome_msg})
 
 
 def talk(text):
@@ -76,7 +79,6 @@ def first_1():
     try:
         with sr.Microphone() as source:
             print('listening...')
-            # talk('listening...')
             voice = listener.listen(source)
             # print(voice.get_raw_data())
             command = listener.recognize_google(
@@ -96,24 +98,24 @@ def run_alexa(command):
         reply = "No command recieved"
     elif 'play' in command:
         song = command.replace('play', '')
-        talk('playing ' + song)
+        # talk('playing ' + song)
         reply = 'playing ' + song
         pywhatkit.playonyt(song)
     elif 'search' in command:
         inp = command.replace('search', '')
-        talk('searching ' + inp)
+        # talk('searching ' + inp)
         reply = 'searching ' + inp
         pywhatkit.search(inp)
     elif 'time' in command:
         time = datetime.datetime.now().strftime('%I:%M %p')
         reply = 'Current time is ' + time
-        talk('Current time is ' + time)
+        # talk('Current time is ' + time)
     elif 'rest' in command or 'sleep' in command:
-        talk('Okay Guys I will just take a nap, Call me whenever u need my help')
+        # talk('Okay Guys I will just take a nap, Call me whenever u need my help')
         reply = 'Okay Guys I will just take a nap, Call me whenever u need my help'
         exit()
     else:
-        talk('Please say the command again.')
+        # talk('Please say the command again.')
         reply = 'Please say the command again.'
 
     return dict({"name": "Jarvis", "msg": reply})
