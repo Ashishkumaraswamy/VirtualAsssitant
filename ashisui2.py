@@ -2,8 +2,6 @@ from tkinter import*
 from PIL import Image, ImageTk
 import tkinter_tutorials as tt
 
-posy = 0.2
-
 
 def changesatus(text):
     statuslabel['text'] = text
@@ -14,7 +12,6 @@ def myfucntion():
 
 
 def get_va_msg():
-    print('Here')
     msg = tt.first_1()
     if(msg['msg'] == ""):
         return
@@ -31,33 +28,23 @@ def get_va_msg():
 
 
 def show_msg(msg):
-    print("Here")
-    global posy
     print(msg)
-    length = len(msg['msg'])
-    width = int(length/15)
-    if width > 0:
-        width_change = 0
-    else:
-        width_change = length % 15
-    height = int(length/20)
+    second_frame.width = 500
+    second_frame.height = 600
+    print(second_frame.winfo_height())
+    print(second_frame.winfo_width())
     if msg['name'] == "You":
-        print("Inside Hre")
-        newmsg = Label(second_frame, text=msg['msg'], font=(
-            "Georgia"), wraplength=150, borderwidth=2)
-        newmsg.corner_radius = 5
-        newmsg.border_width = 2
-        newmsg.place(relx=0.6+width_change*0.005, rely=posy, relwidth=0.33-width_change*0.005,
-                     relheight=0.025+(height+1)*0.032, anchor="w")
-        posy += 0.04+(height+1)*0.032
+        msgframe = Frame(second_frame, bg='gray26')
+        newmsg = Label(msgframe, text=msg['msg'], font=(
+            "Georgia"), wraplength=200, padx=10, justify=LEFT)
+        msgframe.pack(side=TOP, pady=10, fill=X, padx=20)
+        newmsg.pack(side=RIGHT)
     else:
-        newmsg = Label(second_frame, text=msg['msg'], font=(
-            "Georgia"), wraplength=150, borderwidth=2)
-        newmsg.corner_radius = 5
-        newmsg.border_width = 2
-        newmsg.place(relx=0.04, rely=posy, relwidth=0.33-width_change*0.0005,
-                     relheight=0.025+(height+1)*0.032, anchor="w")
-        posy += 0.04+(height+1)*0.032
+        msgframe = Frame(second_frame, bg='gray26')
+        newmsg = Label(msgframe, text=msg['msg'], font=(
+            "Georgia"), wraplength=200, padx=10, justify=LEFT)
+        msgframe.pack(side=TOP, fill=X, pady=10, padx=10)
+        newmsg.pack(side=LEFT)
 
 
 def onFrameConfigure(canvas):
@@ -68,8 +55,6 @@ def onFrameConfigure(canvas):
 root = Tk()
 root.title("J.A.R.V.I.S")
 root.iconbitmap('voice-assistant.ico')
-
-# root.geometry("600x800")
 frame1 = Frame(root, height=600, width=500,
                bg='gray26')
 frame1.pack()
@@ -95,19 +80,22 @@ setting = Button(frame2, image=settingsimg, padx=2, pady=2,
                  width=40, height=40, relief=FLAT)
 setting.grid(row=0, column=3, padx=20, pady=5)
 scrollbar = Scrollbar(frame1, bg="white", command=canvas.yview)
-scrollbar.place(relx=0.97, relheight=1)
+scrollbar.pack(side=RIGHT, fill=Y)
 canvas.configure(yscrollcommand=scrollbar.set)
 canvas.pack()
 canvas.create_window((0, 0), window=second_frame, anchor="nw")
 second_frame.bind("<Configure>", lambda event,
                   canvas=canvas: onFrameConfigure(canvas))
+second_frame.pack_propagate(0)
 img = Image.open("avatar.jpg")
 img = img.resize((50, 50))
 avatarimg = ImageTk.PhotoImage(img)
-avatar = Label(second_frame, image=avatarimg, anchor=E,
-               height=50, width=50, padx=5, pady=5, bg="gray26")
-avatar.place(rely=0.04, relx=0.85)
-root.resizable(0,0)
+avatarframe = Frame(second_frame, bg='gray26')
+avatar = Label(avatarframe, image=avatarimg, anchor=E,
+               height=50, width=50, padx=5, pady=5, bg="gray26", justify=RIGHT)
+avatarframe.pack(side=TOP, pady=10, fill=X, padx=10)
+avatar.pack(side=RIGHT, pady=10)
+root.resizable(0, 0)
 # msg = "Hello This is Ashish.How are you?adasdas sdsadsa sfasfa sfaafasfa "
 # dictionary = {"msg": msg, "name": "Jarvis"}
 # dictionary1 = {"msg": "Hello", "name": "Jarvis"}
