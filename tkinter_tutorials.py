@@ -10,6 +10,7 @@ import pywhatkit
 import datetime
 import pyjokes
 import wikipedia
+import subprocess
 # import ashishui as ui
 
 listener = sr.Recognizer()
@@ -72,8 +73,6 @@ def talk(text):
 # #         talk('Please say the command again.')
 
 
-# # while True:
-# #     run_alexa()
 
 
 def first_1():
@@ -95,6 +94,34 @@ def first_1():
     return dict({"name": "You", "msg": command})
 
 
+
+def note(text):
+    date = datetime.datetime.now()
+    file_name = str(date).replace(":","-")+"-note.txt"
+    with open(file_name,"w") as f:
+        f.write(text)
+    
+    subprocess.Popen(['notepad.exe',file_name])        
+def run_note():
+    talk("What would you like me to write down?")
+    note_text = first_1()
+    note(note_text['msg'])
+    return "I've made a note of that."
+def whats_run():
+    talk("can you tell the mobile number?")
+    ph_no = first_1()
+    ph_no = ph_no['msg']
+    ph_no = ph_no.replace(' ', '')
+    talk("What is the message?")
+    note_text = first_1()
+    print(int(datetime.datetime.now().strftime("%M"))+1)
+    print(ph_no)
+    pywhatkit.sendwhatmsg(f"+91{ph_no}",note_text['msg'],int(datetime.datetime.now().strftime("%H")),int(datetime.datetime.now().strftime("%M"))+1,wait_time=10)
+
+    return "I've sent the message to this phone number :"+ph_no
+
+
+
 def run_alexa(command):
     if command == "No command recieved":
         reply = "No command recieved"
@@ -113,10 +140,18 @@ def run_alexa(command):
         reply = 'Current time is ' + time
         # talk('Current time is ' + time)
     elif 'tell me about' in command:
-         person = command.replace('tell me about', '')
-         reply = wikipedia.summary(person, 1)
+        person = command.replace('tell me about', '')
+        reply = wikipedia.summary(person, 1)
     elif 'joke' in command:
         reply = pyjokes.get_joke()
+    elif 'open notepad' in command:
+        reply = run_note()
+    elif 'make a note' in command:
+        reply = run_note()
+    elif 'write this down' in command:
+        reply = run_note()
+    elif 'send a message in whatsapp' in command:
+        reply = whats_run()
     elif 'rest' in command or 'sleep' in command:
         # talk('Okay Guys I will just take a nap, Call me whenever u need my help')
         reply = 'Okay Guys I will just take a nap, Call me whenever u need my help'
