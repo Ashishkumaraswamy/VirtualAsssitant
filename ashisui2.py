@@ -71,7 +71,7 @@ keyboard = Button(frame2, image=keyimg, padx=2, pady=2,
                   width=40, height=40, relief=FLAT)
 keyboard.grid(row=0, column=0, padx=20, pady=5)
 statuslabel = Label(frame2, text="Listening...", height=2, width=30, padx=5, pady=5,
-                    bg="gray26", fg="white", font=("Georgia", 12), relief=FLAT)
+                    bg="gray26", fg="white", font=("Georgia"), relief=FLAT)
 statuslabel.grid(row=0, column=2, padx=10, pady=5)
 img = Image.open("settings.png")
 img = img.resize((40, 40))
