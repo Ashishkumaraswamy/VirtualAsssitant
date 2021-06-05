@@ -83,7 +83,7 @@ def first_1():
             voice = listener.listen(source)
             # print(voice.get_raw_data())
             command = listener.recognize_google(
-                voice, key=None, language='en-US', show_all=True)
+                voice, key=None, language ='en-in', show_all=True)
             if command != []:
                 command = command['alternative'][0]['transcript']
                 command = command.lower()
@@ -108,15 +108,22 @@ def run_note():
     note(note_text['msg'])
     return "I've made a note of that."
 def whats_run():
-    talk("can you tell the mobile number?")
-    ph_no = first_1()
-    ph_no = ph_no['msg']
-    ph_no = ph_no.replace(' ', '')
+    while(True):
+        talk("can you tell the mobile number?")
+        ph_no = first_1()
+        ph_no = ph_no['msg']
+        ph_no = ph_no.replace(' ', '')
+        print(ph_no)
+        if(len(ph_no)==10 and ph_no.isnumeric() == True):
+            break
+    
     talk("What is the message?")
     note_text = first_1()
-    print(int(datetime.datetime.now().strftime("%M"))+1)
-    print(ph_no)
-    pywhatkit.sendwhatmsg(f"+91{ph_no}",note_text['msg'],int(datetime.datetime.now().strftime("%H")),int(datetime.datetime.now().strftime("%M"))+1,wait_time=10)
+    a=1
+    if(a==60 and int(datetime.datetime.now().strftime("%S")) <= 40):
+        a=0
+    
+    pywhatkit.sendwhatmsg(f"+91{ph_no}",note_text['msg'],int(datetime.datetime.now().strftime("%H")),int(datetime.datetime.now().strftime("%M"))+a,wait_time=10)
 
     return "I've sent the message to this phone number :"+ph_no
 
@@ -130,6 +137,9 @@ def run_alexa(command):
         # talk('playing ' + song)
         reply = 'playing ' + song
         pywhatkit.playonyt(song)
+    elif 'how are you' in command:
+        reply = "I am fine, Thank you"
+        reply += ",How are you, Sir?"
     elif 'search' in command:
         inp = command.replace('search', '')
         # talk('searching ' + inp)
