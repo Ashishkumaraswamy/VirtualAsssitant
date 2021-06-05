@@ -12,6 +12,8 @@ import pyjokes
 import wikipedia
 import subprocess
 import pyscreenshot
+import webbrowser
+import psutil
 # import ashishui as ui
 
 listener = sr.Recognizer()
@@ -47,34 +49,6 @@ def talk(text):
 # #     except:
 # #         pass
 # #     return command
-
-
-# # def run_alexa():
-# #     command = take_command()
-# #     print(command)
-# #     if 'play' in command:
-# #         song = command.replace('play', '')
-# #         talk('playing ' + song)
-# #         pywhatkit.playonyt(song)
-# #     elif 'time' in command:
-# #         time = datetime.datetime.now().strftime('%I:%M %p')
-# #         talk('Current time is ' + time)
-# #     elif 'who the heck is' in command:
-# #         person = command.replace('who the heck is', '')
-# #         info = wikipedia.summary(person, 1)
-# #         print(info)
-# #         talk(info)
-# #     elif 'date' in command:
-# #         talk('sorry, I have a headache')
-# #     elif 'are you single' in command:
-# #         talk('I am in a relationship with wifi')
-# #     elif 'joke' in command:
-# #         talk(pyjokes.get_joke())
-# #     else:
-# #         talk('Please say the command again.')
-
-
-
 
 def first_1():
     command = ""
@@ -155,6 +129,14 @@ def run_alexa(command):
         reply = wikipedia.summary(person, 1)
     elif 'joke' in command:
         reply = pyjokes.get_joke()
+    elif 'battery percentage' in command or 'battery info' in command or 'battery information' in command :
+        battery_data = psutil.sensors_battery()
+        if battery_data.power_plugged:
+            str = ' charging '
+        else:
+            str = ' not charging '
+        reply = "Your system is currently "+str+"and it is "+format(battery_data.percent)+" percent."
+
     elif 'take screenshot' in command:
         talk("Taking screenshot")
         image = pyscreenshot.grab()
@@ -170,6 +152,16 @@ def run_alexa(command):
         reply = run_note()
     elif 'write this down' in command:
         reply = run_note()
+
+    elif 'open spotify' in command:
+        talk("Opening Spotify Sir!!")
+        subprocess.Popen(['spotify.exe'])
+        #subprocess.run(['spotify.exe'],input="dive back in time",)
+        # b=webbrowser.get()
+        # b.open("https://open.spotify.com")  
+        reply = "Opened Spotify application"
+
+
     elif 'send a message in whatsapp' in command:
         reply = whats_run()
     elif 'rest' in command or 'sleep' in command:
