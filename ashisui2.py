@@ -5,6 +5,8 @@ from threading import *
 from tkinter import ttk
 import datetime
 import pywhatkit
+import re
+regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
 
 def changesatus(text):
@@ -24,6 +26,17 @@ def sendwhatsappmsg(ph_no, phonewindow):
 
     return "I've sent the message to this phone number :"+ph_no
 
+def sendmail(ph_no, phonewindow):
+    phonewindow.destroy()
+    tt.talk("What is the subject?")
+    sub = tt.first_1()
+    tt.talk("What is the message?")
+    note_text = tt.first_1()
+
+    pywhatkit.send_mail("socialmediaatwork123@gmail.com","Qwerty123@",sub['msg'],note_text['msg'],ph_no)
+
+    return "I've sent the mail to this Mail ID:"+ph_no
+
 
 def validatephone(entry, errortext, phonewindow):
     phoneinput = entry.get()
@@ -35,6 +48,42 @@ def validatephone(entry, errortext, phonewindow):
         errortext['text'] = "Enter a Valid Phone Number"
         errortext['bg'] = "red"
 
+def validateemail(entry, errortext, phonewindow):
+    phoneinput = entry.get()
+    print(phoneinput)
+    if(re.search(regex, phoneinput)):
+        sendmail(phoneinput, phonewindow)
+    else:
+        entry.delete(0, END)
+        errortext['text'] = "Enter a Valid Email Number"
+        errortext['bg'] = "red"
+
+def mail_window():
+    phone_window = Toplevel(root)
+    phone_window.geometry("500x220")
+    phone_window.title("Email ADDRESS")
+    title = Label(phone_window, text="Email ID",
+                  bg="green", justify=CENTER, font=("Goergia", 15))
+    title.pack(fill=X, side=TOP)
+    title.config(height=2)
+    phoneframe = Frame(phone_window, bg="white")
+    phoneframe.pack(fill=X, side=TOP)
+    phoneframe.config(height=100)
+    phoneframe.pack_propagate(0)
+    errortext = Label(phoneframe, text="", bg="white", font=("Georgia", 12))
+    errortext.pack(fill=X)
+    entrylabel = Label(phoneframe, text="Enter Email ID:",
+                       bg="white", font=("Georgia", 13))
+    entrylabel.pack(side=LEFT, padx=20)
+    entry = Entry(phoneframe, justify=LEFT, width=50)
+    entry.pack(side=RIGHT, padx=30)
+    submitframe = Frame(phone_window, bg="white")
+    submitframe.pack(side=TOP, fill=X)
+    submitbtn = Button(submitframe, text="Submit", height=3, width=7,
+                       justify=CENTER, font=("Georgia", 12), bg="black", fg="white", relief=FLAT, command=lambda: validateemail(entry, errortext, phone_window))
+    submitbtn.pack(pady=20)
+    root.update()
+    tt.talk("Enter the Email address")
 
 def phone_window():
     phone_window = Toplevel(root)
@@ -74,6 +123,9 @@ def get_va_msg():
         return
     elif(msg['msg'] == "send a message in whatsapp"):
         phone_window()
+        return
+    elif(msg['msg'] == "send a mail") or (msg['msg'] == "send a email"):
+        mail_window()
         return
     show_msg(msg)
     root.update()
