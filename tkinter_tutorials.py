@@ -166,6 +166,9 @@ def run_alexa(command):
 
     elif 'open notepad' in command:
         reply = run_note()
+    elif 'open spotify' in command:
+        subprocess.Popen(['spotify.exe'])
+        reply = "Opened Spotify application"
     elif 'make a note' in command:
         reply = run_note()
     elif 'write this down' in command:
