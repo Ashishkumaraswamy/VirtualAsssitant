@@ -73,8 +73,6 @@ def talk(text):
 # #         talk('Please say the command again.')
 
 
-
-
 def first_1():
     command = ""
     try:
@@ -83,7 +81,7 @@ def first_1():
             voice = listener.listen(source)
             # print(voice.get_raw_data())
             command = listener.recognize_google(
-                voice, key=None, language ='en-in', show_all=True)
+                voice, key=None, language='en-in', show_all=True)
             if command != []:
                 command = command['alternative'][0]['transcript']
                 command = command.lower()
@@ -94,19 +92,22 @@ def first_1():
     return dict({"name": "You", "msg": command})
 
 
-
 def note(text):
     date = datetime.datetime.now()
-    file_name = str(date).replace(":","-")+"-note.txt"
-    with open(file_name,"w") as f:
+    file_name = str(date).replace(":", "-")+"-note.txt"
+    with open(file_name, "w") as f:
         f.write(text)
-    
-    subprocess.Popen(['notepad.exe',file_name])        
+
+    subprocess.Popen(['notepad.exe', file_name])
+
+
 def run_note():
     talk("What would you like me to write down?")
     note_text = first_1()
     note(note_text['msg'])
     return "I've made a note of that."
+
+
 def whats_run():
     while(True):
         talk("can you tell the mobile number?")
@@ -114,19 +115,19 @@ def whats_run():
         ph_no = ph_no['msg']
         ph_no = ph_no.replace(' ', '')
         print(ph_no)
-        if(len(ph_no)==10 and ph_no.isnumeric() == True):
+        if(len(ph_no) == 10 and ph_no.isnumeric() == True):
             break
-    
+
     talk("What is the message?")
     note_text = first_1()
-    a=1
-    if(a==60 and int(datetime.datetime.now().strftime("%S")) <= 40):
-        a=0
-    
-    pywhatkit.sendwhatmsg(f"+91{ph_no}",note_text['msg'],int(datetime.datetime.now().strftime("%H")),int(datetime.datetime.now().strftime("%M"))+a,wait_time=10)
+    a = 1
+    if(a == 60 and int(datetime.datetime.now().strftime("%S")) <= 40):
+        a = 0
+
+    pywhatkit.sendwhatmsg(f"+91{ph_no}", note_text['msg'], int(datetime.datetime.now(
+    ).strftime("%H")), int(datetime.datetime.now().strftime("%M"))+a, wait_time=10)
 
     return "I've sent the message to this phone number :"+ph_no
-
 
 
 def run_alexa(command):
