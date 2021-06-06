@@ -26,6 +26,7 @@ def sendwhatsappmsg(ph_no, phonewindow):
 
     return "I've sent the message to this phone number :"+ph_no
 
+
 def sendmail(ph_no, phonewindow):
     phonewindow.destroy()
     tt.talk("What is the subject?")
@@ -33,7 +34,8 @@ def sendmail(ph_no, phonewindow):
     tt.talk("What is the message?")
     note_text = tt.first_1()
 
-    pywhatkit.send_mail("socialmediaatwork123@gmail.com","Qwerty123@",sub['msg'],note_text['msg'],ph_no)
+    pywhatkit.send_mail("socialmediaatwork123@gmail.com",
+                        "Qwerty123@", sub['msg'], note_text['msg'], ph_no)
 
     return "I've sent the mail to this Mail ID:"+ph_no
 
@@ -48,6 +50,7 @@ def validatephone(entry, errortext, phonewindow):
         errortext['text'] = "Enter a Valid Phone Number"
         errortext['bg'] = "red"
 
+
 def validateemail(entry, errortext, phonewindow):
     phoneinput = entry.get()
     print(phoneinput)
@@ -57,6 +60,7 @@ def validateemail(entry, errortext, phonewindow):
         entry.delete(0, END)
         errortext['text'] = "Enter a Valid Email Number"
         errortext['bg'] = "red"
+
 
 def mail_window():
     phone_window = Toplevel(root)
@@ -84,6 +88,7 @@ def mail_window():
     submitbtn.pack(pady=20)
     root.update()
     tt.talk("Enter the Email address")
+
 
 def phone_window():
     phone_window = Toplevel(root)
@@ -118,6 +123,7 @@ def myfucntion():
 
 
 def get_va_msg():
+    print("here")
     msg = tt.first_1()
     if(msg['msg'] == ""):
         return
