@@ -36,7 +36,8 @@ listener = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
-dictionary=PyDictionary()
+dictionary = PyDictionary()
+
 
 def authorize_google():
     creds = None
@@ -232,13 +233,14 @@ def run_alexa(command):
         song = command.replace('play', '')
         reply = 'playing ' + song
         pywhatkit.playonyt(song)
-    elif 'battery percentage' in command or 'battery info' in command or 'battery information' in command :
+    elif 'battery percentage' in command or 'battery info' in command or 'battery information' in command:
         battery_data = psutil.sensors_battery()
         if battery_data.power_plugged:
             strg = ' charging '
         else:
             strg = ' not charging '
-        reply = "Your system is currently "+strg+"and it is "+format(battery_data.percent)+" percent."
+        reply = "Your system is currently "+strg+"and it is " + \
+            format(battery_data.percent)+" percent."
 
     elif 'take screenshot' in command:
         talk("Taking screenshot")
@@ -277,33 +279,32 @@ def run_alexa(command):
         inp = command.replace('open', '')
         inp = inp.replace(' ', '')
         talk("Opening "+inp+" Sir!!")
-        b=webbrowser.get()
-        if( inp == "myanimelist"):
+        b = webbrowser.get()
+        if(inp == "myanimelist"):
             b.open("https://myanimelist.net")
-        elif ( inp == "stackoverflow"):
+        elif (inp == "stackoverflow"):
             b.open("https://stackoverflow.com")
-        elif ( inp == "youtube"):
+        elif (inp == "youtube"):
             b.open("https://www.youtube.com")
-        elif ( inp == "github"):
+        elif (inp == "github"):
             b.open("https://github.com")
-        elif ( inp == "nucleus"):
+        elif (inp == "nucleus"):
             b.open("https://nucleus.amcspsgtech.in")
-        elif ( inp == "moodle"):
+        elif (inp == "moodle"):
             b.open("https://moodle.amcspsgtech.in")
         reply = "Opened "+inp+" in your web browser"
-
 
     elif 'open spotify' in command:
         talk("Opening Spotify Sir!!")
         subprocess.Popen(['spotify.exe'])
         #subprocess.run(['spotify.exe'],input="dive back in time",)
         # b=webbrowser.get()
-        # b.open("https://open.spotify.com")  
+        # b.open("https://open.spotify.com")
         reply = "Opened Spotify application"
 
-
     elif 'send a message in whatsapp' in command:
-        reply = whats_run()
+        # reply = whats_run()
+        reply = "Message sending failure"
     elif 'find the meaning of' in command:
         inp = command.replace('find the meaning of', '')
         inp = inp.replace(' ', '')
@@ -324,8 +325,4 @@ def run_alexa(command):
 
     return dict({"name": "Jarvis", "msg": reply})
 
-from calculator.simple import SimpleCalculator
 
-c = SimpleCalculator()
-c.run('1 + 1 * 8 * 3')
-d=c.lcd
