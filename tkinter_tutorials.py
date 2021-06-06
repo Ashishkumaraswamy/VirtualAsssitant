@@ -22,6 +22,7 @@ import pytz
 import webbrowser
 import psutil
 from PyDictionary import PyDictionary
+from calculator.simple import SimpleCalculator
 
 
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
@@ -147,46 +148,6 @@ def talk(text):
     engine.runAndWait()
 
 
-# # def take_command():
-# #     try:
-# #         with sr.Microphone() as source:
-# #             print('listening...')
-# #             voice = listener.listen(source)
-# #             command = listener.recognize_google(voice)
-# #             command = command.lower()
-# #             if 'alexa' in command:
-# #                 command = command.replace('alexa', '')
-# #                 print(command)
-# #     except:
-# #         pass
-# #     return command
-
-
-# # def run_alexa():
-# #     command = take_command()
-# #     print(command)
-# #     if 'play' in command:
-# #         song = command.replace('play', '')
-# #         talk('playing ' + song)
-# #         pywhatkit.playonyt(song)
-# #     elif 'time' in command:
-# #         time = datetime.datetime.now().strftime('%I:%M %p')
-# #         talk('Current time is ' + time)
-# #     elif 'who the heck is' in command:
-# #         person = command.replace('who the heck is', '')
-# #         info = wikipedia.summary(person, 1)
-# #         print(info)
-# #         talk(info)
-# #     elif 'date' in command:
-# #         talk('sorry, I have a headache')
-# #     elif 'are you single' in command:
-# #         talk('I am in a relationship with wifi')
-# #     elif 'joke' in command:
-# #         talk(pyjokes.get_joke())
-# #     else:
-# #         talk('Please say the command again.')
-
-
 def first_1():
     command = ""
     try:
@@ -300,6 +261,17 @@ def run_alexa(command):
         reply = run_note()
     elif 'write this down' in command:
         reply = run_note()
+
+    elif 'calculate' in command:
+        inp = command.replace('calculate', '')
+        if 'divide' in command:
+            inp = inp.replace('divide', '/')
+        if 'by' in command:
+            inp = inp.replace('by', '/')
+        c = SimpleCalculator()
+        c.run(inp)
+        d=c.lcd
+        reply = "Answer is :"+ str(d)
     
     elif 'open myanimelist' in command or 'open stackoverflow' in command or 'open youtube' in command or 'open github' in command or 'open nucleus' in command or 'open moodle' in command :
         inp = command.replace('open', '')
@@ -352,6 +324,8 @@ def run_alexa(command):
 
     return dict({"name": "Jarvis", "msg": reply})
 
+from calculator.simple import SimpleCalculator
 
-
-run_alexa("find the meaning of nonsense")
+c = SimpleCalculator()
+c.run('1 + 1 * 8 * 3')
+d=c.lcd

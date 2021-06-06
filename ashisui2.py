@@ -22,7 +22,7 @@ def sendwhatsappmsg(ph_no, phonewindow):
         a = 0
 
     pywhatkit.sendwhatmsg(f"+91{ph_no}", note_text['msg'], int(datetime.datetime.now(
-    ).strftime("%H")), int(datetime.datetime.now().strftime("%M"))+a, wait_time=10)
+    ).strftime("%H")), int(datetime.datetime.now().strftime("%M"))+a)
 
     return "I've sent the message to this phone number :"+ph_no
 
