@@ -171,15 +171,25 @@ def onFrameConfigure(canvas):
 
 
 root = Tk()
+root.configure(bg="gray26")
 root.title("J.A.R.V.I.S")
 root.iconbitmap('voice-assistant.ico')
 frame1 = Frame(root, height=600, width=500,
                bg='gray26')
 frame1.pack_propagate(0)
 frame1.pack()
-canvas = Canvas(frame1, relief=SUNKEN)
+canvas = Canvas(frame1, bg="gray26")
 second_frame = Frame(canvas, height=600, width=500,
                      bg='gray26')
+scrollbar = ttk.Scrollbar(frame1, orient="vertical", command=canvas.yview)
+# canvas.config(width=500, height=600)
+canvas.configure(yscrollcommand=scrollbar.set)
+scrollbar.pack(side=RIGHT, fill=Y)
+canvas.pack(fill=BOTH, expand=1, side=LEFT)
+canvas.create_window((4, 4), window=second_frame,
+                     anchor="nw", width=500)
+second_frame.bind("<Configure>", lambda event,
+                  canvas=canvas: onFrameConfigure(canvas))
 frame2 = Frame(root, height=150, width=500, bd=5)
 frame2.pack(fill=BOTH, expand=1)
 img = Image.open("keyboard.png")
@@ -197,15 +207,7 @@ va_btn = ImageTk.PhotoImage(img)
 mic = Button(frame2, image=va_btn, borderwidth=0,
              )
 mic.grid(row=0, column=3, padx=20, pady=5)
-scrollbar = ttk.Scrollbar(frame1, orient="vertical", command=canvas.yview)
-scrollbar.pack(side=RIGHT, fill=Y)
-canvas.pack(fill=BOTH, expand=1, side=LEFT)
-canvas.config(width=500, height=600)
-canvas.configure(yscrollcommand=scrollbar.set)
-canvas.bind("<Configure>", lambda e: canvas.configure(
-    scrollregion=canvas.bbox("all")))
-canvas.create_window((0, 0), window=second_frame, anchor="nw")
-second_frame.pack_propagate(0)
+# second_frame.pack_propagate(0)
 img = Image.open("avatar.jpg")
 img = img.resize((50, 50))
 avatarimg = ImageTk.PhotoImage(img)
