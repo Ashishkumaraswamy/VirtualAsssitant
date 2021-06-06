@@ -22,9 +22,10 @@ def sendwhatsappmsg(ph_no, phonewindow):
         a = 0
 
     pywhatkit.sendwhatmsg(f"+91{ph_no}", note_text['msg'], int(datetime.datetime.now(
-    ).strftime("%H")), int(datetime.datetime.now().strftime("%M"))+a, wait_time=10)
+    ).strftime("%H")), int(datetime.datetime.now().strftime("%M"))+a)
 
-    return "I've sent the message to this phone number :"+ph_no
+    tt.talk("Your message will be sent shortly to "+ph_no)
+    get_va_msg()
 
 
 def sendmail(ph_no, phonewindow):
@@ -36,8 +37,8 @@ def sendmail(ph_no, phonewindow):
 
     pywhatkit.send_mail("socialmediaatwork123@gmail.com",
                         "Qwerty123@", sub['msg'], note_text['msg'], ph_no)
-
-    return "I've sent the mail to this Mail ID:"+ph_no
+    tt.talk("Your mail will be sent shortly to "+ph_no)
+    get_va_msg()
 
 
 def validatephone(entry, errortext, phonewindow):
@@ -123,27 +124,25 @@ def myfucntion():
 
 
 def get_va_msg():
-    print("here")
     msg = tt.first_1()
     if(msg['msg'] == ""):
-        return
+        get_va_msg()
     elif(msg['msg'] == "send a message in whatsapp"):
         phone_window()
-        return
     elif(msg['msg'] == "send a mail") or (msg['msg'] == "send a email"):
         mail_window()
-        return
-    show_msg(msg)
-    root.update()
-    changesatus("Processing..")
-    root.update()
-    msg = tt.run_alexa(msg['msg'])
-    show_msg(msg)
-    root.update()
-    tt.talk(msg['msg'])
-    changesatus("Listening..")
-    root.update()
-    get_va_msg()
+    else:
+        show_msg(msg)
+        root.update()
+        changesatus("Processing..")
+        root.update()
+        msg = tt.run_alexa(msg['msg'])
+        show_msg(msg)
+        root.update()
+        tt.talk(msg['msg'])
+        changesatus("Listening..")
+        root.update()
+        get_va_msg()
 
 
 def show_msg(msg):
