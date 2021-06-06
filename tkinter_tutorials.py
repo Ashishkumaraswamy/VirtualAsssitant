@@ -14,13 +14,14 @@ import subprocess
 import pyscreenshot
 import webbrowser
 import psutil
+from PyDictionary import PyDictionary
 # import ashishui as ui
 
 listener = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
-
+dictionary=PyDictionary()
 
 def first_run():
     welcome_msg = "HI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!".format(
@@ -107,11 +108,8 @@ def whats_run():
 def run_alexa(command):
     if command == "No command recieved":
         reply = "No command recieved"
-    elif 'play' in command:
-        song = command.replace('play', '')
-        # talk('playing ' + song)
-        reply = 'playing ' + song
-        pywhatkit.playonyt(song)
+    elif 'hello' in command or 'hi' in command:
+        reply = "Hello sir!!"
     elif 'how are you' in command:
         reply = "I am fine, Thank you"
         reply += ",How are you, Sir?"
@@ -129,13 +127,17 @@ def run_alexa(command):
         reply = wikipedia.summary(person, 1)
     elif 'joke' in command:
         reply = pyjokes.get_joke()
+    elif 'play' in command:
+        song = command.replace('play', '')
+        reply = 'playing ' + song
+        pywhatkit.playonyt(song)
     elif 'battery percentage' in command or 'battery info' in command or 'battery information' in command :
         battery_data = psutil.sensors_battery()
         if battery_data.power_plugged:
-            str = ' charging '
+            strg = ' charging '
         else:
-            str = ' not charging '
-        reply = "Your system is currently "+str+"and it is "+format(battery_data.percent)+" percent."
+            strg = ' not charging '
+        reply = "Your system is currently "+strg+"and it is "+format(battery_data.percent)+" percent."
 
     elif 'take screenshot' in command:
         talk("Taking screenshot")
@@ -152,6 +154,26 @@ def run_alexa(command):
         reply = run_note()
     elif 'write this down' in command:
         reply = run_note()
+    
+    elif 'open myanimelist' in command or 'open stackoverflow' in command or 'open youtube' in command or 'open github' in command or 'open nucleus' in command or 'open moodle' in command :
+        inp = command.replace('open', '')
+        inp = inp.replace(' ', '')
+        talk("Opening "+inp+" Sir!!")
+        b=webbrowser.get()
+        if( inp == "myanimelist"):
+            b.open("https://myanimelist.net")
+        elif ( inp == "stackoverflow"):
+            b.open("https://stackoverflow.com")
+        elif ( inp == "youtube"):
+            b.open("https://www.youtube.com")
+        elif ( inp == "github"):
+            b.open("https://github.com")
+        elif ( inp == "nucleus"):
+            b.open("https://nucleus.amcspsgtech.in")
+        elif ( inp == "moodle"):
+            b.open("https://moodle.amcspsgtech.in")
+        reply = "Opened "+inp+" in your web browser"
+
 
     elif 'open spotify' in command:
         talk("Opening Spotify Sir!!")
@@ -164,17 +186,29 @@ def run_alexa(command):
 
     elif 'send a message in whatsapp' in command:
         reply = whats_run()
+    elif 'find the meaning of' in command:
+        inp = command.replace('find the meaning of', '')
+        inp = inp.replace(' ', '')
+        out = dictionary.meaning(inp)
+        list = [(k, v) for k, v in out.items()]
+        out = ""
+        for x in list:
+            out += x[0] + " : "+x[1][0]+"\n"
+        print(out)
+        reply = out
     elif 'rest' in command or 'sleep' in command:
         # talk('Okay Guys I will just take a nap, Call me whenever u need my help')
         reply = 'Okay Guys I will just take a nap, Call me whenever u need my help'
         exit()
     else:
         # talk('Please say the command again.')
-        reply = 'Please say the command again.'
+        reply = 'sorry sir!! i cannot understand !!!'
 
     return dict({"name": "Jarvis", "msg": reply})
 
 
+
+run_alexa("find the meaning of nonsense")
 # if __name__ == "__main__":
 #     app = ui.ChatApplication()
 #     while(True):
