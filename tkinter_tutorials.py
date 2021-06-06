@@ -355,8 +355,3 @@ def run_alexa(command):
 
 
 run_alexa("find the meaning of nonsense")
-# if __name__ == "__main__":
-#     app = ui.ChatApplication()
-#     while(True):
-#         app.run()
-#         run_alexa(app)
