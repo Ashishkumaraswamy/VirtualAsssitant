@@ -4,19 +4,22 @@ Created on Sun May 30 11:02:31 2021
 @author: Ashish
 """
 from __future__ import print_function
+from copy import error
 import datetime
 import os.path
+import sys
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+import requests
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
 import datetime
 import pyjokes
 import wikipedia
-import subprocess
+import subprocess,os
 import pyscreenshot
 import pytz
 import webbrowser
@@ -234,6 +237,24 @@ def run_alexa(command):
         song = command.replace('play', '')
         reply = 'playing ' + song
         pywhatkit.playonyt(song)
+    elif "weather" in command:
+        api_key = "d97dd2dfd8d75bd9862f7f4e71096463"
+        base_url = "http://api.openweathermap.org/data/2.5/weather"
+        talk("City name:")
+        city_name = first_1()
+        city_name = city_name['msg']
+
+        parm = {'APPID': api_key, 'q': city_name, 'units': 'Metric'}
+        response = requests.get(base_url,params=parm)
+        weather = response.json()
+        if weather["cod"] != "404":
+            reply = "Name: "+str(weather['name']) + "\n"
+            reply += "Conditions: "+str(weather['weather'][0]['description']) + "\n"
+            reply += "Temperature (°C):"+str(weather['main']['temp'])
+        else:
+            reply="City Not Found"
+        print(reply)
+        
     elif 'battery percentage' in command or 'battery info' in command or 'battery information' in command:
         battery_data = psutil.sensors_battery()
         if battery_data.power_plugged:
@@ -303,14 +324,23 @@ def run_alexa(command):
         # b=webbrowser.get()
         # b.open("https://open.spotify.com")
         reply = "Opened Spotify application"
-
+    elif "close camera" :
+        try:
+            d = subprocess.run('Taskkill /IM WindowsCamera.exe /F', shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        except Exception as e:
+            pass
+        reply = "Camera application is closed"
     elif "camera" in command or "take a photo" in command:
-        reply = ""
-        
+        subprocess.run('start microsoft.windows.camera:', shell=True)
+        reply = "Opened Camera application"
+
+    
+
+    
     elif "volume up" in command or "increase volume" in command or "increase sound" in command  or "increase the volume" in command or "increase the sound" in command :
         pyautogui.press("volumeup")
         reply = "Increased the volume sir!!"
-    elif "volume up" in command or "decrease volume" in command or "decrease sound" in command or "decrease the volume" in command or "decrease the sound" in command:
+    elif "volume down" in command or "decrease volume" in command or "decrease sound" in command or "decrease the volume" in command or "decrease the sound" in command:
         pyautogui.press("volumedown")
         reply = "decreased the volume sir!!"
     elif "mute" in command :
@@ -323,7 +353,16 @@ def run_alexa(command):
     elif "close chrome" in command or "close webbrowser" in command or "close web browser" in command:
         subprocess.call("taskkill /IM chrome.exe") 
         reply = "chrome closed sir!!"
-    
+    elif "where is" in command or "locate" in command:
+
+        if "where is" in command:
+            query = command.replace("where is", "")
+        else:
+            query = command.replace("locate", "")
+        location = query
+        webbrowser.open("https://www.google.com/maps/place/" + location + "")
+        reply = "User asked to Locate" + location
+
     elif "what's your name" in command or "what is your name" in command:
         reply = "My name is Jarvis a virtual assistant!!"
 
@@ -334,6 +373,8 @@ def run_alexa(command):
     elif "who made you" in command or "who created you" in command or "who is your god" in command :
         reply = "I have been created by 3 idiots Ashish mathan sai shyam!!."
 
+    elif "will you be my gf" in command or "will you be my bf" in command or "will you be my girl friend" in command or "will you be my girlfriend" in command:  
+        reply = "I'm not sure about, may be you should give me some time"
     elif "i love you" in command:
         reply = "It's hard to understand"
 
@@ -351,11 +392,17 @@ def run_alexa(command):
         print(out)
         reply = out
     elif 'rest' in command or 'sleep' in command:
-        # talk('Okay Guys I will just take a nap, Call me whenever u need my help')
         reply = 'Okay Guys I will just take a nap, Call me whenever u need my help'
         exit()
     else:
-        # talk('Please say the command again.')
-        reply = 'sorry sir!! i cannot understand !!!'
+        talk("I can search the web for you, Do you want to continue?")
+        ans = first_1()
+        ans = ans['msg']
+        if 'yes' in str(ans) or 'yeah' in str(ans):
+            pywhatkit.search(command)
+            reply = "ok sir!! i have searched what i cannot understand !!"
+        else:
+            reply = 'sorry sir!! i cannot understand !!!'
 
     return dict({"name": "Jarvis", "msg": reply})
+
