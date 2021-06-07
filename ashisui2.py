@@ -6,6 +6,7 @@ from tkinter import ttk
 import datetime
 import pywhatkit
 import re
+import time
 regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
 
@@ -15,29 +16,47 @@ def changesatus(text):
 
 def sendwhatsappmsg(ph_no, phonewindow):
     phonewindow.destroy()
+    show_msg(dict({'name': 'Jarvis', 'msg': "What is the message?"}))
+    root.update()
     tt.talk("What is the message?")
     note_text = tt.first_1()
+    show_msg(note_text)
+    root.update()
     a = 1
     if(a == 59 and int(datetime.datetime.now().strftime("%S")) <= 40):
         a = 0
-
+    tt.talk("Your message will be sent shortly to "+ph_no)
+    show_msg(
+        dict({'name': 'Jarvis', 'msg': "Your message will be sent shortly to "+ph_no}))
+    root.update()
     pywhatkit.sendwhatmsg(f"+91{ph_no}", note_text['msg'], int(datetime.datetime.now(
     ).strftime("%H")), int(datetime.datetime.now().strftime("%M"))+a)
 
-    tt.talk("Your message will be sent shortly to "+ph_no)
     get_va_msg()
 
 
 def sendmail(ph_no, phonewindow):
     phonewindow.destroy()
+    show_msg(
+        dict({'name': 'Jarvis', 'msg': "What is the subject?"}))
+    root.update()
     tt.talk("What is the subject?")
     sub = tt.first_1()
+    show_msg(sub)
+    root.update()
+    show_msg(
+        dict({'name': 'Jarvis', 'msg': "What is the message?"}))
+    root.update()
     tt.talk("What is the message?")
     note_text = tt.first_1()
-
+    show_msg(note_text)
+    root.update()
     pywhatkit.send_mail("socialmediaatwork123@gmail.com",
                         "Qwerty123@", sub['msg'], note_text['msg'], ph_no)
-    tt.talk("Your mail will be sent shortly to "+ph_no)
+    show_msg(
+        dict({'name': 'Jarvis', 'msg': "Email sent successfully to "+ph_no}))
+    root.update()
+    tt.talk("Email sent successfully to "+ph_no)
     get_va_msg()
 
 
@@ -88,6 +107,8 @@ def mail_window():
                        justify=CENTER, font=("Georgia"), bg="black", fg="white", relief=FLAT, command=lambda: validateemail(entry, errortext, phone_window))
     submitbtn.pack(pady=20)
     root.update()
+    show_msg(dict({'name': "Jarvis", 'msg': "Enter the Email address"}))
+    root.update()
     tt.talk("Enter the Email address")
 
 
@@ -116,11 +137,35 @@ def phone_window():
                        justify=CENTER, font=("Georgia"), bg="black", fg="white", relief=FLAT, command=lambda: validatephone(entry, errortext, phone_window))
     submitbtn.pack(pady=20)
     root.update()
+    show_msg(dict({'name': "Jarvis", 'msg': "Enter the Phone Number"}))
+    root.update()
     tt.talk("Enter the Phone Number")
 
 
 def myfucntion():
     canvas.configure(scrollregion=canvas.bbox("all"))
+
+
+def delete_window():
+    for widgets in frame1.winfo_children():
+        widgets.destroy()
+    root.update()
+
+
+def create_window():
+    # contentwindow = canvas.create_window((4, 4), window=second_frame,
+    #                                      anchor="nw", width=500)
+    # second_frame.bind("<Configure>", lambda event,
+    #                   canvas=canvas: onFrameConfigure(canvas))
+    # img = Image.open("avatar.jpg")
+    # img = img.resize((50, 50))
+    # avatarimg = ImageTk.PhotoImage(img)
+    avatarframe = Frame(frame1, bg='gray26')
+    avatar = Label(avatarframe, image=avatarimg, anchor=E,
+                   height=50, width=50, padx=5, pady=5, bg="gray26", justify=RIGHT)
+    avatarframe.pack(side=TOP, pady=10, fill=X, padx=10)
+    avatar.pack(side=RIGHT, pady=10)
+    root.update()
 
 
 def get_va_msg():
@@ -140,29 +185,30 @@ def get_va_msg():
         show_msg(msg)
         root.update()
         tt.talk(msg['msg'])
+        time.sleep(1.5)
         changesatus("Listening..")
         root.update()
+        delete_window()
+        create_window()
         get_va_msg()
 
 
 def show_msg(msg):
     print(msg)
-    second_frame.width = 500
-    second_frame.height = 600
     if msg['name'] == "You":
-        msgframe = Frame(second_frame, bg='gray26')
+        msgframe = Frame(frame1, bg='gray26')
         newmsg = Label(msgframe, text=msg['msg'], font=(
             "Georgia"), wraplength=200, padx=10, justify=LEFT)
         msgframe.pack(side=TOP, pady=10, fill=X, padx=20)
         newmsg.pack(side=RIGHT)
-        root.update()
+        # root.update()
     else:
-        msgframe = Frame(second_frame, bg='gray26')
+        msgframe = Frame(frame1, bg='gray26')
         newmsg = Label(msgframe, text=msg['msg'], font=(
             "Georgia"), wraplength=200, padx=10, justify=LEFT)
         msgframe.pack(side=TOP, fill=X, pady=10, padx=10)
         newmsg.pack(side=LEFT)
-        root.update()
+        # root.update()
 
 
 def onFrameConfigure(canvas):
@@ -178,18 +224,6 @@ frame1 = Frame(root, height=600, width=500,
                bg='gray26')
 frame1.pack_propagate(0)
 frame1.pack()
-canvas = Canvas(frame1, bg="gray26")
-second_frame = Frame(canvas, height=600, width=500,
-                     bg='gray26')
-scrollbar = ttk.Scrollbar(frame1, orient="vertical", command=canvas.yview)
-# canvas.config(width=500, height=600)
-canvas.configure(yscrollcommand=scrollbar.set)
-scrollbar.pack(side=RIGHT, fill=Y)
-canvas.pack(fill=BOTH, expand=1, side=LEFT)
-canvas.create_window((4, 4), window=second_frame,
-                     anchor="nw", width=500)
-second_frame.bind("<Configure>", lambda event,
-                  canvas=canvas: onFrameConfigure(canvas))
 frame2 = Frame(root, height=150, width=500, bd=5)
 frame2.pack(fill=BOTH, expand=1)
 img = Image.open("keyboard.png")
@@ -211,7 +245,7 @@ mic.grid(row=0, column=3, padx=20, pady=5)
 img = Image.open("avatar.jpg")
 img = img.resize((50, 50))
 avatarimg = ImageTk.PhotoImage(img)
-avatarframe = Frame(second_frame, bg='gray26')
+avatarframe = Frame(frame1, bg='gray26')
 avatar = Label(avatarframe, image=avatarimg, anchor=E,
                height=50, width=50, padx=5, pady=5, bg="gray26", justify=RIGHT)
 avatarframe.pack(side=TOP, pady=10, fill=X, padx=10)
@@ -241,7 +275,7 @@ root.resizable(0, 0)
 #             self.window.update()
 #         self.window.mainloop()
 # root.update()
-root.update()
+# root.update()
 msg = tt.first_run()
 show_msg(msg)
 root.update()

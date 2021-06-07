@@ -2,9 +2,11 @@ from tkinter import *
 from PIL import ImageTk, Image
 import tkinter_tutorials as ob
 
+
 def vabutton():
     label['text'] = "listening..."
     label['text'] = ob.run_alexa()
+
 
 HEIGHT = 550
 WIDTH = 450
@@ -20,10 +22,8 @@ root.iconbitmap('voice-assistant.ico')
 # bg_label.place(relheight=1, relwidth=1)
 
 
-
-
 va_btn = PhotoImage(file='vabutton.png')
-button = Button(root,image=va_btn,borderwidth=0,command=vabutton)
+button = Button(root, image=va_btn, borderwidth=0, command=vabutton)
 button.pack(padx=10)
 
 frame_output = Frame(root, bg="#99b3e6", bd=3)
@@ -36,4 +36,3 @@ label.place(relheight=1, relwidth=1)
 
 
 root.mainloop()
-

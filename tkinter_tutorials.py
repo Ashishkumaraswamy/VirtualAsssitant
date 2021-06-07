@@ -275,7 +275,7 @@ def run_alexa(command):
         d = c.lcd
         reply = "Answer is :" + str(d)
 
-    elif 'open myanimelist' in command or 'open stackoverflow' in command or 'open youtube' in command or 'open github' in command or 'open nucleus' in command or 'open moodle' in command :
+    elif 'open myanimelist' in command or 'open stackoverflow' in command or 'open youtube' in command or 'open github' in command or 'open nucleus' in command or 'open moodle' in command:
         inp = command.replace('open', '')
         inp = inp.replace(' ', '')
         talk("Opening "+inp+" Sir!!")
