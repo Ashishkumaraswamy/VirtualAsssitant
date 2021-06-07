@@ -1,19 +1,19 @@
 a
 
-    Mù¼`<.  ã                   @   s`  d Z ddlmZ ddlZddlZddlmZ ddlm	Z	 ddl
+    {§½`c*  ã                   @   sd  d Z ddlmZ ddlZddlZddlmZ ddlm	Z	 ddl
 mZ ddlm
 Z
- ddlZddlZddlZddlZddlZddlZddlZddlZddlZddlZddlZddlmZ d	gZg d
-¢Zg d¢Zg d¢Ze ¡ Ze  ¡ Z!e! "d
-¡Z#e! $de#d j%¡ eƒ Z&dd„ Z'dd„ Z(dd„ Z)dd„ Z*dd„ Z+dd„ Z,dd„ Z-dd„ Z.dd „ Z/d!d"„ Z0e0d#ƒ dS )$z5
+ ddlZddlZddlZddlZddlZddlZddlZddlZddlZddlZddlZddlmZ dd	lmZ d
+gZg d¢Zg d¢Zg d
+¢Ze  ¡ Z!e "¡ Z#e# $d¡Z%e# &de%d j'¡ eƒ Z(dd„ Z)dd„ Z*dd„ Z+dd„ Z,dd„ Z-dd„ Z.dd„ Z/dd„ Z0d d!„ Z1d"d#„ Z2dS )$z5
 Created on Sun May 30 11:02:31 2021
 @author: Ashish
-é    )Úprint_functionN)Úbuild)ÚInstalledAppFlow)ÚRequest)ÚCredentials)ÚPyDictionaryz(https://www.googleapis.com/auth/calendar)ZjanuaryZfebruaryZmarchZaprilZmayZjuneZjulyZaugustZ	septemberZoctoberZnovemberZdecember)ZmondayZtuesdayZ	wednesdayZthursdayZfridayZsaturdayZsunday)ZrdZthÚstZndÚvoicesÚvoicec                  C   s¦   d } t j d¡rt dt¡} | r&| js”| rD| jrD| jrD|  	t
+é    )Úprint_functionN)Úbuild)ÚInstalledAppFlow)ÚRequest)ÚCredentials)ÚPyDictionary)ÚSimpleCalculatorz1https://www.googleapis.com/auth/calendar.readonly)ZjanuaryZfebruaryZmarchZaprilZmayZjuneZjulyZaugustZ	septemberZoctoberZnovemberZdecember)ZmondayZtuesdayZ	wednesdayZthursdayZfridayZsaturdayZsunday)ZrdZthÚstZndÚvoicesÚvoicec                  C   s¦   d } t j d¡rt dt¡} | r&| js”| rD| jrD| jrD|  	t
 ƒ ¡ nt dt¡}|j
 dd} tddƒ}| |  ¡ ¡ W d   ƒ n1 sŠ0    Y  tdd| d}|S )	Nz
 token.jsonzclient_secret.jsonr   )ÚportÚwZcalendarZv3)Zcredentials)ÚosÚpathÚexistsr   Zfrom_authorized_user_fileÚSCOPESZvalidZexpiredZ
-refresh_tokenZrefreshr   r   Zfrom_client_secrets_fileZrun_local_serverÚopenÚwriteZto_jsonr   )ZcredsZflowÚtokenÚservice© r   úTc:\Users\Sabareesh\Documents\Virtual Assistant\VirtualAsssitant\tkinter_tutorials.pyÚauthorize_google)   s    
-ÿ,r   c                 C   s  t j  | t j j ¡ ¡}t j  | t j j ¡ ¡}tj}| |¡}| |¡}| ¡ j	d| 
+refresh_tokenZrefreshr   r   Zfrom_client_secrets_fileZrun_local_serverÚopenÚwriteZto_jsonr   )ZcredsZflowÚtokenÚservice© r   úTc:\Users\Sabareesh\Documents\Virtual Assistant\VirtualAsssitant\tkinter_tutorials.pyÚauthorize_google*   s    
+ÿ,r   c                 C   s  t j  | t j j ¡ ¡}t j  | t j j ¡ ¡}tj}| |¡}| |¡}| ¡ j	d| 
 ¡ | 
 ¡ ddd ¡ }| dg ¡}d}|sŠt
 dƒ dS |D ]z}|d  d	|d  d
@@ -26,15 +26,15 @@ d d …  d }	t
 |	|d ƒ ||	7 }||d 7 }|d7 }qŽ|S )NZprimaryTZ	startTime)Z
 calendarIdZtimeMinZtimeMaxZsingleEventsZorderByÚitemsÚ zNo upcoming events found.ÚstartZdateTimeÚdateÚTé   é   é   ú ÚsummaryÚ
 )ÚdatetimeZcombineÚminÚtimeÚmaxÚpytzZUTCZ
-astimezoneÚeventsÚlistZ	isoformatZexecuteÚgetÚprintÚfind)Údayr   r   Zend_dateZutcZ
-events_resultr(   Z
-returnlistÚeventr   r,   r   r   r   Ú
-get_events;   s,    
+astimezoneÚeventsÚlistZ	isoformatZexecuteÚgetÚprintÚfind)Údayr   r   Zend_dateZutcZ
+events_resultr)   Z
+returnlistÚeventr   r-   r   r   r   Ú
+get_events<   s,    
 
 ÿ
 
 (
-r/   c                 C   s  |   ¡ } tj ¡ }|  d¡dkr$|S d}d}d}|j}|  ¡ D ]€}|tv rZt |¡d }q>|t	v rnt	 |¡}q>| 
+r0   c                 C   s  |   ¡ } tj ¡ }|  d¡dkr$|S d}d}d}|j}|  ¡ D ]€}|tv rZt |¡d }q>|t	v rnt	 |¡}q>| 
 ¡ r€t|ƒ}q>tD ]8}| 
 |¡}|dkr„zt|d |… ƒ}W q„   Y q„0 q„q>||jk rÚ|dkrÚ|d }|dkr|dkr||jk r|jd }n|j}|dkrr|dkrr|dkrr| ¡ }	||	 }
 |
@@ -43,52 +43,48 @@ d7 }
 |  d¡dkrd|
 d7 }
 |t |
-¡ S |dkrŒtj|||dS d S )NÚtodayr   éÿÿÿÿr   é   Únext)Úmonthr-   Úyear)Úlowerr#   r   r0   Úcountr5   ÚsplitÚMONTHSÚindexÚDAYSÚisdigitÚintÚDAY_EXTENTIONSr,   r4   r-   ZweekdayZ	timedelta)Útextr0   r-   Zday_of_weekr4   r5   ÚwordÚextÚfoundZcurrent_day_of_weekZdifr   r   r   Úget_dateS   sL    
+¡ S |dkrŒtj|||dS d S )NÚtodayr   éÿÿÿÿr   é   Únext)Úmonthr.   Úyear)Úlowerr$   r   r1   Úcountr6   ÚsplitÚMONTHSÚindexÚDAYSÚisdigitÚintÚDAY_EXTENTIONSr-   r5   r.   ZweekdayZ	timedelta)Útextr1   r.   Zday_of_weekr5   r6   ÚwordÚextÚfoundZcurrent_day_of_weekZdifr   r   r   Úget_dateT   sL    
 
 
 
 
 
-rC   c                  C   s,   d  tj ¡  d¡¡} t ¡  td| dœƒS )NzbHI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!ú%I:%M %pÚJarvis©ÚnameÚmsg)Úformatr#   ÚnowÚstrftimeÚengineÚ
-runAndWaitÚdict)Zwelcome_msgr   r   r   Ú	first_run‹   s
-    ÿrO   c                 C   s   t  | ¡ t  ¡  d S )N)rL   ZsayrM   )r?   r   r   r   Útalk’   s    
-rP   c                  C   sž   d} z~t  ¡ b}tdƒ t |¡}tj|d ddd} t| ƒ | g kr^| d d d } |  ¡ } nd} W d   ƒ n1 sv0    Y  W n   Y n0 td	| d
-œƒS )Nr   zlistening...zen-inT)ÚkeyZlanguageZshow_allZalternativer   Z
-transcriptÚYourF   )ÚsrZ
-Microphoner+   ÚlistenerZlistenZrecognize_googler6   rN   )ÚcommandÚsourcer
-   r   r   r   Úfirst_1¿   s     
+rD   c                  C   s,   d  tj ¡  d¡¡} t ¡  td| dœƒS )NzbHI Project Members This is Jarvis here!!.Current time is {}. An exciting day awaits before you .!!ú%I:%M %pÚJarvis©ÚnameÚmsg)Úformatr$   ÚnowÚstrftimeÚengineÚ
+runAndWaitÚdict)Zwelcome_msgr   r   r   Ú	first_runŒ   s
+    ÿrP   c                 C   s   t  | ¡ t  ¡  d S )N)rM   ZsayrN   )r@   r   r   r   Útalk“   s    
+rQ   c                  C   sž   d} z~t  ¡ b}tdƒ t |¡}tj|d ddd} t| ƒ | g kr^| d d d } |  ¡ } nd} W d   ƒ n1 sv0    Y  W n   Y n0 td	| d
+œƒS )Nr   zlistening...zen-inT)ÚkeyZlanguageZshow_allZalternativer   Z
+transcriptÚYourG   )ÚsrZ
+Microphoner,   ÚlistenerZlistenZrecognize_googler7   rO   )ÚcommandÚsourcer   r   r   r   Úfirst_1˜   s     
 
 ÿ
-&rW   c                 C   sd   t j  ¡ }t|ƒ dd¡d }t|dƒ}| | ¡ W d   ƒ n1 sH0    Y  t d|g¡ d S )Nú:ú-z	-note.txtr   znotepad.exe)r#   rJ   ÚstrÚreplacer   r   Ú
-subprocessÚPopen)r?   r   Ú	file_nameÚfr   r   r   ÚnoteÓ   s
+&rX   c                 C   sd   t j  ¡ }t|ƒ dd¡d }t|dƒ}| | ¡ W d   ƒ n1 sH0    Y  t d|g¡ d S )Nú:ú-z	-note.txtr
+   znotepad.exe)r$   rK   ÚstrÚreplacer   r   Ú
+subprocessÚPopen)r@   r   Ú	file_nameÚfr   r   r   Únote¬   s
     
-(r`   c                  C   s   t dƒ tƒ } t| d ƒ dS )Nz%What would you like me to write down?rH   zI've made a note of that.)rP   rW   r`   )Ú	note_textr   r   r   Úrun_noteÜ   s    rb   c                  C   sÆ   t dƒ tƒ } | d } |  dd¡} t| ƒ t| ƒdkr |  ¡ dkr qFq t dƒ tƒ }d}|d	kr|ttj ¡  	d
+(ra   c                  C   s   t dƒ tƒ } t| d ƒ dS )Nz%What would you like me to write down?rI   zI've made a note of that.)rQ   rX   ra   )Ú	note_textr   r   r   Úrun_noteµ   s    rc   c                  C   sÆ   t dƒ tƒ } | d } |  dd¡} t| ƒ t| ƒdkr |  ¡ dkr qFq t dƒ tƒ }d}|d	kr|ttj ¡  	d
 ¡ƒdkr|d}t
 jd
-| › |d ttj ¡  	d¡ƒttj ¡  	d¡ƒ| dd d|  S )Nzcan you tell the mobile number?rH   r    r   é
-   TzWhat is the message?r   é<   z%Sé(   r   z+91z%Hz%M)Z	wait_timez,I've sent the message to this phone number :)rP   rW   r[   r+   ÚlenÚ	isnumericr=   r#   rJ   rK   Ú	pywhatkitÚsendwhatmsg)Úph_nora   Úar   r   r   Ú	whats_runã   s$     ÿÿrl   c                 C   sö  | dkrd}nØd| v s d| v r(d}nÀd| v r@d}|d7 }n¨d| v rj|   dd	¡}d
-| }t |¡ n~d| v rŽtj ¡  d¡}d
-| }nZd| v r²|   dd	¡}t |d¡}n6d| v rÆt 	¡ }n"d| v rð|   dd	¡}d| }t 
-|¡ nød| v sd| v sd| v rFt ¡ }|j
-r$d}nd}d| d t|jƒ d }n¢d| v r˜tdƒ t ¡ }tj ¡ }	t|	ƒ  dd¡d }
+| › |d ttj ¡  	d¡ƒttj ¡  	d¡ƒ| dd d|  S )Nzcan you tell the mobile number?rI   r!   r   é
+   TzWhat is the message?r   é<   z%Sé(   r   z+91z%Hz%M)Z	wait_timez,I've sent the message to this phone number :)rQ   rX   r\   r,   ÚlenÚ	isnumericr>   r$   rK   rL   Ú	pywhatkitÚsendwhatmsg)Úph_norb   Úar   r   r   Ú	whats_run¼   s$     ÿÿrm   c                 C   s^  | dkrd}n@d| v s d| v r(d}n(d| v r@d}|d7 }nd| v rj|   dd	¡}d
+| }t |¡ næd| v rŽtj ¡  d¡}d
+| }nÂd| v r²|   dd	¡}t |d¡}nžd| v rÆt 	¡ }nŠd| v rð|   dd	¡}d| }t 
+|¡ n`d| v sd| v sd| v rFt ¡ }|j
+r$d}nd}d| d t|jƒ d }n
+d| v r˜tdƒ t ¡ }tj ¡ }	t|	ƒ  dd¡d }
 | |
-¡ | ¡  d }nPd!| v r¾tƒ }t| ƒ}	t|	|ƒ}n*d"| v rÒtƒ }nd#| v rðt d$g¡ d%}nød&| v rtƒ }näd'| v rtƒ }nÐd(| v sTd)| v sTd*| v sTd+| v sTd,| v sTd-| v r|   d.d	¡}|  d/d	¡}td0| d1 ƒ t ¡ }|d2krš| d3¡ nl|d4kr°| d5¡ nV|d6krÆ| d7¡ n@|d8krÜ| d9¡ n*|d:krò| d;¡ n|d<kr| d=¡ d>| d? }nÔd#| v r8td@ƒ t d$g¡ d%}n°dA| v rHdB}n dC| v rÄ|   dCd	¡}|  d/d	¡}t  |¡}
-dDdE„ |
- !¡ D ƒ}d	}
-|D ]&}|
-|dF dG |d dF  dH 7 }
-qŽt"|
-ƒ |
-}n$dI| v sØdJ| v rädK}t#ƒ  ndL}t$dM|dNœƒS )ONzNo command recievedZhelloÚhizHello sir!!zhow are youzI am fine, Thank youz,How are you, Sir?Úsearchr   z
-searching r%   rD   zCurrent time is z
-tell me aboutr   ZjokeZplayzplaying zbattery percentagezbattery infozbattery informationz
+¡ | ¡  d }n¸d!| v r¾tƒ }t| ƒ}	t|	|ƒ}n’d"| v rÒtƒ }n~d#| v rðt d$g¡ d%}n`d&| v rtƒ }nLd'| v rtƒ }n8d(| v r€|   d(d	¡}d)| v rD|  d)d*¡}d+| v rZ|  d+d*¡}tƒ }| |¡ |j}
+d,t|
+ƒ }nÐd-| v s¼d.| v s¼d/| v s¼d0| v s¼d1| v s¼d2| v r||   d3d	¡}|  d4d	¡}td5| d6 ƒ t  ¡ }|d7kr| !d8¡ nl|d9kr| !d:¡ nV|d;kr.| !d<¡ n@|d=krD| !d>¡ n*|d?krZ| !d@¡ n|dAkrn| !dB¡ dC| dD }nÔd#| v r tdEƒ t d$g¡ d%}n°dF| v r°dG}n dH| v r,|   dHd	¡}|  d4d	¡}t" #|¡}dIdJ„ | $¡ D ƒ}d	}|D ]&}||dK dL |d dK  dM 7 }qöt%|ƒ |}n$dN| v s@dO| v rLdP}t&ƒ  ndQ}t'dR|dSœƒS )TNzNo command recievedZhelloÚhizHello sir!!zhow are youzI am fine, Thank youz,How are you, Sir?Úsearchr   z
+searching r&   rE   zCurrent time is z
+tell me aboutr   ZjokeZplayzplaying zbattery percentagezbattery infozbattery informationz
  charging z not charging zYour system is currently z
-and it is z	 percent.ztake screenshotzTaking screenshotrX   rY   z-screenshot.pngzTook the screenshotztell me the eventszopen notepadzopen spotifyzspotify.exezOpened Spotify applicationzmake a notezwrite this downzopen myanimelistzopen stackoverflowzopen youtubezopen githubzopen nucleuszopen moodler   r    zOpening z Sir!!Zmyanimelistzhttps://myanimelist.netZ
-stackoverflowzhttps://stackoverflow.comZyoutubezhttps://www.youtube.comZgithubzhttps://github.comZnucleuszhttps://nucleus.amcspsgtech.inZmoodlezhttps://moodle.amcspsgtech.inzOpened z in your web browserzOpening Spotify Sir!!zsend a message in whatsappzMessage sending failurezfind the meaning ofc                 S   s   g | ]\}}||f‘qS r   r   )Ú.0ÚkÚvr   r   r   Ú
-<listcomp>T  ó    zrun_alexa.<locals>.<listcomp>r   z : r"   ÚrestÚsleepzAOkay Guys I will just take a nap, Call me whenever u need my helpz#sorry sir!! i cannot understand !!!rE   rF   )%r[   rh   rn   r#   rJ   rK   Ú	wikipediar!   ÚpyjokesZget_jokeZplayonytÚpsutilZsensors_batteryZ
-power_pluggedrI   ÚpercentrP   ÚpyscreenshotÚgrabrZ   ÚsaveÚshowr   rC   r/   rb   r\   r]   Ú
-webbrowserr*   r   Ú
-dictionaryZmeaningr   r+   ÚexitrN   )rU   ZreplyÚinpr%   ZpersonZsongZbattery_dataZstrgÚimager   r^   r   ÚbÚoutr)   Úxr   r   r   Ú	run_alexaù   sº    
+and it is z	 percent.ztake screenshotzTaking screenshotrY   rZ   z-screenshot.pngzTook the screenshotztell me the eventszopen notepadzopen spotifyzspotify.exezOpened Spotify applicationzmake a notezwrite this downZ	calculateZdivideú/ZbyzAnswer is :zopen myanimelistzopen stackoverflowzopen youtubezopen githubzopen nucleuszopen moodler   r!   zOpening z Sir!!Zmyanimelistzhttps://myanimelist.netZ
+stackoverflowzhttps://stackoverflow.comZyoutubezhttps://www.youtube.comZgithubzhttps://github.comZnucleuszhttps://nucleus.amcspsgtech.inZmoodlezhttps://moodle.amcspsgtech.inzOpened z in your web browserzOpening Spotify Sir!!zsend a message in whatsappzMessage sending failurezfind the meaning ofc                 S   s   g | ]\}}||f‘qS r   r   )Ú.0ÚkÚvr   r   r   Ú
+<listcomp>8  ó    zrun_alexa.<locals>.<listcomp>r   z : r#   ÚrestÚsleepzAOkay Guys I will just take a nap, Call me whenever u need my helpz#sorry sir!! i cannot understand !!!rF   rG   )(r\   ri   ro   r$   rK   rL   Ú	wikipediar"   ÚpyjokesZget_jokeZplayonytÚpsutilZsensors_batteryZ
+power_pluggedrJ   ÚpercentrQ   ÚpyscreenshotÚgrabr[   ÚsaveÚshowr   rD   r0   rc   r]   r^   r   ÚrunZlcdÚ
+webbrowserr+   r   Ú
+dictionaryZmeaningr   r,   ÚexitrO   )rV   ZreplyÚinpr&   ZpersonZsongZbattery_dataZstrgÚimager   r_   r   ÚcÚdÚbÚoutr*   Úxr   r   r   Ú	run_alexaÒ   sÎ    
 ÿÿ
 
 
@@ -100,7 +96,11 @@ dictionaryZmeaningr   r+   ÚexitrN   )rU   ZreplyÚinpr%   ZpersonZsong
 
 
 
-<
+
+
+
+
+<
 
 
 
@@ -111,8 +111,8 @@ dictionaryZmeaningr   r+   ÚexitrN   )rU   ZreplyÚinpr%   ZpersonZsong
 
 
 
-$r†   zfind the meaning of nonsense)1Ú__doc__Z
-__future__r   r#   Zos.pathr
-   Zgoogleapiclient.discoveryr   Zgoogle_auth_oauthlib.flowr   Zgoogle.auth.transport.requestsr   Zgoogle.oauth2.credentialsr   Zspeech_recognitionrS   Zpyttsx3rh   rw   rv   r\   rz   r'   r~   rx   r   r   r9   r;   r>   Z
-RecognizerrT   ÚinitrL   ZgetPropertyr	   ZsetPropertyÚidr   r   r/   rC   rO   rP   rW   r`   rb   rl   r†   r   r   r   r   Ú<module>   sN   
-8-	l
+$r‹   )3Ú__doc__Z
+__future__r   r$   Zos.pathr   Zgoogleapiclient.discoveryr   Zgoogle_auth_oauthlib.flowr   Zgoogle.auth.transport.requestsr   Zgoogle.oauth2.credentialsr   Zspeech_recognitionrT   Zpyttsx3ri   ry   rx   r]   r|   r(   r   rz   r   Zcalculator.simpler   r   r:   r<   r?   Z
+RecognizerrU   ÚinitrM   ZgetPropertyr
+   ZsetPropertyÚidr‚   r   r0   rD   rP   rQ   rX   ra   rc   rm   r‹   r   r   r   r   Ú<module>   sN   
+8	
