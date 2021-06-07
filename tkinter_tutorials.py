@@ -240,10 +240,13 @@ def run_alexa(command):
     elif "weather" in command:
         api_key = "d97dd2dfd8d75bd9862f7f4e71096463"
         base_url = "http://api.openweathermap.org/data/2.5/weather"
-        talk("City name:")
-        city_name = first_1()
-        city_name = city_name['msg']
-
+        
+        while True:
+            talk("City name:")
+            city_name = first_1()
+            city_name = city_name['msg']
+            if(city_name != ""):
+                break
         parm = {'APPID': api_key, 'q': city_name, 'units': 'Metric'}
         response = requests.get(base_url,params=parm)
         weather = response.json()
