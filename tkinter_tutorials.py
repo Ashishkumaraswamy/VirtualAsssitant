@@ -21,6 +21,7 @@ import pyscreenshot
 import pytz
 import webbrowser
 import psutil
+import pyautogui
 from PyDictionary import PyDictionary
 from calculator.simple import SimpleCalculator
 
@@ -280,6 +281,7 @@ def run_alexa(command):
         inp = inp.replace(' ', '')
         talk("Opening "+inp+" Sir!!")
         b = webbrowser.get()
+    
         if(inp == "myanimelist"):
             b.open("https://myanimelist.net")
         elif (inp == "stackoverflow"):
@@ -301,6 +303,39 @@ def run_alexa(command):
         # b=webbrowser.get()
         # b.open("https://open.spotify.com")
         reply = "Opened Spotify application"
+
+    elif "camera" in command or "take a photo" in command:
+        reply = ""
+        
+    elif "volume up" in command or "increase volume" in command or "increase sound" in command  or "increase the volume" in command or "increase the sound" in command :
+        pyautogui.press("volumeup")
+        reply = "Increased the volume sir!!"
+    elif "volume up" in command or "decrease volume" in command or "decrease sound" in command or "decrease the volume" in command or "decrease the sound" in command:
+        pyautogui.press("volumedown")
+        reply = "decreased the volume sir!!"
+    elif "mute" in command :
+        pyautogui.press("volumemute")
+        if "unmute" in command:
+            reply = "system unmute sir!!"
+        else:
+            reply = "system mute sir!!"
+
+    elif "close chrome" in command or "close webbrowser" in command or "close web browser" in command:
+        subprocess.call("taskkill /IM chrome.exe") 
+        reply = "chrome closed sir!!"
+    
+    elif "what's your name" in command or "what is your name" in command:
+        reply = "My name is Jarvis a virtual assistant!!"
+
+    elif 'exit' in command:
+        talk("Thanks for giving me your time see you soon")
+        exit()
+ 
+    elif "who made you" in command or "who created you" in command or "who is your god" in command :
+        reply = "I have been created by 3 idiots Ashish mathan sai shyam!!."
+
+    elif "i love you" in command:
+        reply = "It's hard to understand"
 
     elif 'send a message in whatsapp' in command:
         # reply = whats_run()
