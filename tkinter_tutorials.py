@@ -280,6 +280,7 @@ def run_alexa(command):
         inp = inp.replace(' ', '')
         talk("Opening "+inp+" Sir!!")
         b = webbrowser.get()
+    
         if(inp == "myanimelist"):
             b.open("https://myanimelist.net")
         elif (inp == "stackoverflow"):
@@ -301,6 +302,26 @@ def run_alexa(command):
         # b=webbrowser.get()
         # b.open("https://open.spotify.com")
         reply = "Opened Spotify application"
+
+    elif "camera" in command or "take a photo" in command:
+        reply = ""
+
+    elif "close chrome" in command or "close webbrowser" in command or "close web browser" in command:
+        subprocess.call("taskkill /IM chrome.exe") 
+        reply = "chrome closed sir!!"
+    
+    elif "what's your name" in command or "what is your name" in command:
+        reply = "My name is Jarvis a virtual assistant!!"
+
+    elif 'exit' in command:
+        talk("Thanks for giving me your time see you soon")
+        exit()
+ 
+    elif "who made you" in command or "who created you" in command or "who is your god" in command :
+        reply = "I have been created by 3 idiots Ashish mathan sai shyam!!."
+
+    elif "i love you" in command:
+        reply = "It's hard to understand"
 
     elif 'send a message in whatsapp' in command:
         # reply = whats_run()
