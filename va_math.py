@@ -1,39 +1,51 @@
 from tkinter import *
-from PIL import ImageTk, Image
-import tkinter_tutorials as ob
 
-def vabutton():
-    label['text'] = "listening..."
-    label['text'] = ob.run_alexa()
-
-HEIGHT = 550
-WIDTH = 450
 root = Tk()
-root.title("J.A.R.V.I.S")
-root.geometry("600x600")
-root.iconbitmap('voice-assistant.ico')
+# turns off title bar, geometry
+root.overrideredirect(True)
+# set new geometry
+root.geometry('400x100+200+200')
+# set background color of title bar
+back_ground = "#2c2c2c"
 
-# bg_image = Image.open("jarvis.jpg")
-# bg_image = bg_image.resize((700, 450))
-# bg_image = ImageTk.PhotoImage(bg_image)
-# bg_label = Label(image=bg_image)
-# bg_label.place(relheight=1, relwidth=1)
+# set background of window
+content_color = "#ffffff"
+# make a frame for the title bar
+title_bar = Frame(root, bg=back_ground, relief='raised', bd=1, highlightcolor=back_ground,highlightthickness=0)
+
+# put a close button on the title bar
+close_button = Button(title_bar, text='x',  command=root.destroy,bg=back_ground, padx=5, pady=2, activebackground="red", bd=0,    font="bold", fg='white',        activeforeground="white", highlightthickness=0)
+ # window title
+title_window = "Title Name"
+title_name = Label(title_bar, text=title_window, bg=back_ground, fg="white")
+# a canvas for the main area of the window
+window = Canvas(root, bg="white", highlightthickness=0)
+
+# pack the widgets
+title_bar.pack(expand=1, fill=X)
+title_name.pack(side=LEFT)
+close_button.pack(side=RIGHT)
+window.pack(expand=1, fill=BOTH)
+x_axis = None
+y_axis = None
+# bind title bar motion to the move window function
 
 
+def move_window(event):
+    root.geometry('+{0}+{1}'.format(event.x_root, event.y_root))
 
 
-va_btn = PhotoImage(file='vabutton.png')
-button = Button(root,image=va_btn,borderwidth=0,command=vabutton)
-button.pack(padx=10)
-
-frame_output = Frame(root, bg="#99b3e6", bd=3)
-frame_output.place(relx=0.05, rely=0.5, relheight=0.35,
-                   relwidth=0.90)
-
-label = Label(frame_output, bg="grey", fg='white', font=(
-    'courier', 16), anchor='nw', justify='left', bd=4)
-label.place(relheight=1, relwidth=1)
+def change_on_hovering(event):
+    global close_button
+    close_button['bg'] = 'red'
 
 
+def return_to_normal_state(event):
+   global close_button
+   close_button['bg'] = back_ground
+
+
+title_bar.bind('<B1-Motion>', move_window)
+close_button.bind('<Enter>', change_on_hovering)
+close_button.bind('<Leave>', return_to_normal_state)
 root.mainloop()
-
