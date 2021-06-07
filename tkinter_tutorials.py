@@ -272,9 +272,9 @@ def run_alexa(command):
             inp = inp.replace('by', '/')
         c = SimpleCalculator()
         c.run(inp)
-        d=c.lcd
-        reply = "Answer is :"+ str(d)
-    
+        d = c.lcd
+        reply = "Answer is :" + str(d)
+
     elif 'open myanimelist' in command or 'open stackoverflow' in command or 'open youtube' in command or 'open github' in command or 'open nucleus' in command or 'open moodle' in command :
         inp = command.replace('open', '')
         inp = inp.replace(' ', '')
@@ -324,5 +324,3 @@ def run_alexa(command):
         reply = 'sorry sir!! i cannot understand !!!'
 
     return dict({"name": "Jarvis", "msg": reply})
-
-
