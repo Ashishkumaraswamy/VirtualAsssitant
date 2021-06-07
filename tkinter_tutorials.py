@@ -21,6 +21,7 @@ import pyscreenshot
 import pytz
 import webbrowser
 import psutil
+import pyautogui
 from PyDictionary import PyDictionary
 from calculator.simple import SimpleCalculator
 
@@ -305,6 +306,19 @@ def run_alexa(command):
 
     elif "camera" in command or "take a photo" in command:
         reply = ""
+        
+    elif "volume up" in command or "increase volume" in command or "increase sound" in command  or "increase the volume" in command or "increase the sound" in command :
+        pyautogui.press("volumeup")
+        reply = "Increased the volume sir!!"
+    elif "volume up" in command or "decrease volume" in command or "decrease sound" in command or "decrease the volume" in command or "decrease the sound" in command:
+        pyautogui.press("volumedown")
+        reply = "decreased the volume sir!!"
+    elif "mute" in command :
+        pyautogui.press("volumemute")
+        if "unmute" in command:
+            reply = "system unmute sir!!"
+        else:
+            reply = "system mute sir!!"
 
     elif "close chrome" in command or "close webbrowser" in command or "close web browser" in command:
         subprocess.call("taskkill /IM chrome.exe") 
