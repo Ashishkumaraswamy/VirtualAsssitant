@@ -26,7 +26,7 @@ from PyDictionary import PyDictionary
 from calculator.simple import SimpleCalculator
 
 
-SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+SCOPES = ['https://www.googleapis.com/auth/calendar']
 MONTHS = ["january", "february", "march", "april", "may", "june",
           "july", "august", "september", "october", "november", "december"]
 DAYS = ["monday", "tuesday", "wednesday",
@@ -82,60 +82,92 @@ def get_events(day, service):
     return returnlist
 
 
+def create_event(event):
+    creds = None
+    # The file token.json stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'client_secret.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
+    service = build('calendar', 'v3', credentials=creds)
+    try:
+        event = service.events().insert(calendarId='primary', body=event).execute()
+    except:
+        print("Enter a proper date. Failed to create event. Enter a proper date.")
+        talk("Enter a proper date. Failed to create event. Enter a proper date.")
+    print('Event created:', event.get('htmlLink'))
+
+
 def get_date(text):
-    text = text.lower()
-    today = datetime.date.today()
+    try:
+        text = text.lower()
+        today = datetime.date.today()
 
-    if text.count("today") > 0:
-        return today
-
-    day = -1
-    day_of_week = -1
-    month = -1
-    year = today.year
-
-    for word in text.split():
-        if word in MONTHS:
-            month = MONTHS.index(word) + 1
-        elif word in DAYS:
-            day_of_week = DAYS.index(word)
-        elif word.isdigit():
-            day = int(word)
-        else:
-            for ext in DAY_EXTENTIONS:
-                found = word.find(ext)
-                if found > 0:
-                    try:
-                        day = int(word[:found])
-                    except:
-                        pass
-
-    # THE NEW PART STARTS HERE
-    # if the month mentioned is before the current month set the year to the next
-    if month < today.month and month != -1:
-        year = year+1
-
-    # This is slighlty different from the video but the correct version
-    if month == -1 and day != -1:  # if we didn't find a month, but we have a day
-        if day < today.day:
-            month = today.month + 1
-        else:
+        if text.count("today") > 0:
+            return today
+        elif "tomorrow" in text:
+            day = today.day+1
             month = today.month
+            year = today.year
+            return datetime.date(month=month, day=day, year=year)
 
-    # if we only found a dta of the week
-    if month == -1 and day == -1 and day_of_week != -1:
-        current_day_of_week = today.weekday()
-        dif = day_of_week - current_day_of_week
+        day = -1
+        day_of_week = -1
+        month = -1
+        year = today.year
 
-        if dif < 0:
-            dif += 7
-            if text.count("next") >= 1:
+        for word in text.split():
+            if word in MONTHS:
+                month = MONTHS.index(word) + 1
+            elif word in DAYS:
+                day_of_week = DAYS.index(word)
+            elif word.isdigit():
+                day = int(word)
+            else:
+                for ext in DAY_EXTENTIONS:
+                    found = word.find(ext)
+                    if found > 0:
+                        try:
+                            day = int(word[:found])
+                        except:
+                            pass
+
+        if month < today.month and month != -1:
+            year = year+1
+
+        if month == -1 and day != -1:
+            if day < today.day:
+                month = today.month + 1
+            else:
+                month = today.month
+
+        if month == -1 and day == -1 and day_of_week != -1:
+            current_day_of_week = today.weekday()
+            dif = day_of_week - current_day_of_week
+
+            if dif < 0:
                 dif += 7
+                if text.count("next") >= 1:
+                    dif += 7
 
-        return today + datetime.timedelta(dif)
+            return today + datetime.timedelta(dif)
 
-    if day != -1:  # FIXED FROM VIDEO
-        return datetime.date(month=month, day=day, year=year)
+        if day != -1:
+            return datetime.date(month=month, day=day, year=year)
+    except ValueError as e:
+        print(e)
+        talk(e)
 
 
 def first_run():
@@ -156,7 +188,6 @@ def first_1():
         with sr.Microphone() as source:
             print('listening...')
             voice = listener.listen(source)
-            # print(voice.get_raw_data())
             command = listener.recognize_google(
                 voice, key=None, language='en-in', show_all=True)
             print(command)
@@ -218,13 +249,11 @@ def run_alexa(command):
         reply += ",How are you, Sir?"
     elif 'search' in command:
         inp = command.replace('search', '')
-        # talk('searching ' + inp)
         reply = 'searching ' + inp
         pywhatkit.search(inp)
     elif 'time' in command:
         time = datetime.datetime.now().strftime('%I:%M %p')
         reply = 'Current time is ' + time
-        # talk('Current time is ' + time)
     elif 'tell me about' in command:
         person = command.replace('tell me about', '')
         reply = wikipedia.summary(person, 1)
@@ -281,7 +310,7 @@ def run_alexa(command):
         inp = inp.replace(' ', '')
         talk("Opening "+inp+" Sir!!")
         b = webbrowser.get()
-    
+
         if(inp == "myanimelist"):
             b.open("https://myanimelist.net")
         elif (inp == "stackoverflow"):
@@ -306,14 +335,14 @@ def run_alexa(command):
 
     elif "camera" in command or "take a photo" in command:
         reply = ""
-        
-    elif "volume up" in command or "increase volume" in command or "increase sound" in command  or "increase the volume" in command or "increase the sound" in command :
+
+    elif "volume up" in command or "increase volume" in command or "increase sound" in command or "increase the volume" in command or "increase the sound" in command:
         pyautogui.press("volumeup")
         reply = "Increased the volume sir!!"
     elif "volume up" in command or "decrease volume" in command or "decrease sound" in command or "decrease the volume" in command or "decrease the sound" in command:
         pyautogui.press("volumedown")
         reply = "decreased the volume sir!!"
-    elif "mute" in command :
+    elif "mute" in command:
         pyautogui.press("volumemute")
         if "unmute" in command:
             reply = "system unmute sir!!"
@@ -321,24 +350,23 @@ def run_alexa(command):
             reply = "system mute sir!!"
 
     elif "close chrome" in command or "close webbrowser" in command or "close web browser" in command:
-        subprocess.call("taskkill /IM chrome.exe") 
+        subprocess.call("taskkill /IM chrome.exe")
         reply = "chrome closed sir!!"
-    
+
     elif "what's your name" in command or "what is your name" in command:
         reply = "My name is Jarvis a virtual assistant!!"
 
     elif 'exit' in command:
         talk("Thanks for giving me your time see you soon")
         exit()
- 
-    elif "who made you" in command or "who created you" in command or "who is your god" in command :
+
+    elif "who made you" in command or "who created you" in command or "who is your god" in command:
         reply = "I have been created by 3 idiots Ashish mathan sai shyam!!."
 
     elif "i love you" in command:
         reply = "It's hard to understand"
 
     elif 'send a message in whatsapp' in command:
-        # reply = whats_run()
         reply = "Message sending failure"
     elif 'find the meaning of' in command:
         inp = command.replace('find the meaning of', '')
@@ -350,10 +378,6 @@ def run_alexa(command):
             out += x[0] + " : "+x[1][0]+"\n"
         print(out)
         reply = out
-    elif 'rest' in command or 'sleep' in command:
-        # talk('Okay Guys I will just take a nap, Call me whenever u need my help')
-        reply = 'Okay Guys I will just take a nap, Call me whenever u need my help'
-        exit()
     else:
         # talk('Please say the command again.')
         reply = 'sorry sir!! i cannot understand !!!'

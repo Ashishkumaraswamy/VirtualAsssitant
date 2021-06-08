@@ -7,15 +7,229 @@ import datetime
 import pywhatkit
 import re
 import time
+import pytz
 regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
+
+
+def postevent(titleentry, descentry, startentry, endentry, phone_window):
+    event = {
+        'summary': 'Google I/O 2015',
+        'location': 'Coimbatore',
+        'description': '',
+        'start': {
+            'dateTime': '2015-05-28T09:00:00-07:00',
+            'timeZone': "Asia/Kolkata",
+        },
+        'end': {
+            'dateTime': '2015-05-28T17:00:00-07:00',
+            'timeZone': "Asia/Kolkata",
+        },
+        'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=2'
+        ],
+        'attendees': [
+        ],
+        'reminders': {
+            'useDefault': False,
+            'overrides': [
+                {'method': 'email', 'minutes': 24 * 60},
+                {'method': 'popup', 'minutes': 10},
+            ],
+        },
+    }
+    title = titleentry.get()
+    desc = descentry.get()
+    start = startentry.get()
+    end = endentry.get()
+    phone_window.destroy()
+    event['summary'] = title
+    event['description'] = desc
+    print(start)
+    event['start']['dateTime'] = str(start)
+    event['end']['dateTime'] = str(end)
+    print(event)
+    tt.create_event(event)
+    tt.talk("Event created successfully and added to google calendar")
+    delete_window()
+    create_window()
+    get_va_msg()
 
 
 def changesatus(text):
     statuslabel['text'] = text
 
 
+def checkdetailswindow(eventtitle, eventdescription, start, end):
+    phone_window = Toplevel(root)
+    phone_window.geometry("500x500")
+    phone_window.title("GOOGLE Events")
+    title = Label(phone_window, text="Google Events",
+                  bg="green", justify=CENTER, font=("Goergia"))
+    title.pack(fill=X, side=TOP)
+    title.config(height=2)
+    phoneframe = Frame(phone_window, bg="white")
+    phoneframe.pack(fill=X, side=TOP)
+    phoneframe.config(height=100)
+    phoneframe.pack_propagate(0)
+    errortext = Label(phoneframe, text="",
+                      bg="white", font=("Georgia"))
+    errortext.pack(fill=X)
+    entrylabel = Label(phoneframe, text="Event Title:",
+                       bg="white", font=("Georgia"))
+    entrylabel.pack(side=LEFT, padx=20)
+    titleentry = Entry(phoneframe, justify=LEFT, width=50)
+    titleentry.insert(0, eventtitle)
+    titleentry.pack(side=RIGHT, padx=30)
+    descframe = Frame(phone_window, bg="white")
+    descframe.pack(fill=X, side=TOP)
+    descframe.config(height=100)
+    descframe.pack_propagate(0)
+    entrylabel = Label(descframe, text="Event Description:",
+                       bg="white", font=("Georgia"))
+    entrylabel.pack(side=LEFT, padx=20)
+    descentry = Entry(descframe, justify=LEFT, width=50)
+    descentry.insert(0, eventdescription)
+    descentry.pack(side=RIGHT, padx=30)
+    startframe = Frame(phone_window, bg="white")
+    startframe.pack(fill=X, side=TOP)
+    startframe.config(height=100)
+    startframe.pack_propagate(0)
+    entrylabel = Label(startframe, text="Start Time:",
+                       bg="white", font=("Georgia"))
+    entrylabel.pack(side=LEFT, padx=20)
+    startentry = Entry(startframe, justify=LEFT, width=50)
+    startentry.insert(0, start)
+    startentry.pack(side=RIGHT, padx=30)
+    endframe = Frame(phone_window, bg="white")
+    endframe.pack(fill=X, side=TOP)
+    endframe.config(height=100)
+    endframe.pack_propagate(0)
+    entrylabel = Label(endframe, text="End Time:",
+                       bg="white", font=("Georgia"))
+    entrylabel.pack(side=LEFT, padx=20)
+    endentry = Entry(endframe, justify=LEFT, width=50)
+    endentry.insert(0, end)
+    endentry.pack(side=RIGHT, padx=30)
+    submitframe = Frame(phone_window, bg="white")
+    submitframe.pack(side=TOP, fill=X)
+    submitbtn = Button(submitframe, text="Submit", height=3, width=7,
+                       justify=CENTER, font=("Georgia"), bg="black", fg="white", relief=FLAT, command=lambda: postevent(titleentry, descentry, startentry, endentry, phone_window))
+    submitbtn.pack(pady=20)
+    root.update()
+    show_msg(dict({'name': "Jarvis", 'msg': "Verify the event details"}))
+    root.update()
+    tt.talk("Verify the event details")
+
+
+def timdefromtext(start_time):
+    if "p.m" in start_time['msg']:
+        if ':' in start_time['msg']:
+            try:
+                index = start_time['msg'].find(":")
+                hours = int(start_time['msg'][index-1:index])
+                hours = hours+12
+                minutes = int(start_time['msg'][index+1:index+3])
+                starttime = str(hours)+":"+str(minutes)+":00"
+                print(starttime)
+            except ValueError as e:
+                print("Enter proper date and time")
+        else:
+            try:
+                index = start_time['msg'].find('p.m')
+                hours = int(start_time['msg'][index-1:index])
+                hours += 12
+                starttime = str(hours)+":00:00"
+            except ValueError as e:
+                print("Enter proper date and time")
+    else:
+        if ':' in start_time['msg']:
+            try:
+                index = start_time['msg'].find(":")
+                hours = int(start_time['msg'][index-1:index])
+                minutes = int(start_time['msg'][index+1:index+3])
+                starttime = str(hours)+":"+str(minutes)+":00"
+                print(starttime)
+            except ValueError as e:
+                print("Enter proper date and time")
+        else:
+            index = start_time['msg'].find('a.m')
+            hours = int(start_time['msg'][index-1:index])
+            starttime = str(hours)+":00:00"
+    return starttime
+
+
+def createevent_google(date):
+    try:
+        date = date.strftime("%Y-%m-%d")
+        print(type(date))
+    except AttributeError as e:
+        tt.talk(e)
+        delete_window()
+        create_window()
+        get_va_msg()
+    utc = pytz.UTC
+    # checkdetailswindow(
+    #     "jarvis testing", "jarvis testing", "5.00pm", "6.00pm")
+    show_msg(dict({'name': 'Jarvis', 'msg': 'What is the event title sir?'}))
+    root.update()
+    tt.talk('What is the event title sir?')
+    while (True):
+        event_title = tt.first_1()
+        if event_title['msg'] != "":
+            break
+    show_msg(event_title)
+    root.update()
+    show_msg(dict(
+        {'name': 'Jarvis', 'msg': 'Would u like to add any description of the event?'}))
+    root.update()
+    tt.talk('Would u like to add any description of the event?')
+    while (True):
+        event_description = tt.first_1()
+        if event_description['msg'] != "":
+            break
+    show_msg(event_description)
+    root.update()
+    if event_description['msg'] == "no":
+        event_description['msg'] = ""
+    show_msg(dict(
+        {'name': 'Jarvis', 'msg': 'What is the event start time?'}))
+    root.update()
+    tt.talk('What is the event start time?')
+    while (True):
+        start_time = tt.first_1()
+        if start_time['msg'] != "":
+            starttime = timdefromtext(start_time)
+            # starttime = datetime.datetime.strptime(
+            #     starttime, '%H:%M:%S').time()
+            starttime = str(date)+"T"+starttime
+            # starttime = starttime.astimezone(utc)
+            print(starttime)
+            break
+    show_msg(start_time)
+    root.update()
+    show_msg(dict(
+        {'name': 'Jarvis', 'msg': 'What is the event end time?'}))
+    root.update()
+    tt.talk('What is the event end time?')
+    while (True):
+        end_time = tt.first_1()
+        if end_time['msg'] != "":
+            endtime = timdefromtext(end_time)
+            # endtime = datetime.datetime.strptime(
+            #     endtime, '%H:%M:%S').time()
+            endtime = date+'T'+str(endtime)
+            # endtime = endtime.astimezone(utc)
+            print(endtime)
+            break
+    show_msg(end_time)
+    root.update()
+    checkdetailswindow(
+        event_title['msg'], event_description['msg'], starttime, endtime)
+
+
 def sendwhatsappmsg(ph_no, phonewindow):
     phonewindow.destroy()
+    show_msg(dict({'name': 'You', 'msg': ph_no}))
     show_msg(dict({'name': 'Jarvis', 'msg': "What is the message?"}))
     root.update()
     tt.talk("What is the message?")
@@ -31,7 +245,8 @@ def sendwhatsappmsg(ph_no, phonewindow):
     root.update()
     pywhatkit.sendwhatmsg(f"+91{ph_no}", note_text['msg'], int(datetime.datetime.now(
     ).strftime("%H")), int(datetime.datetime.now().strftime("%M"))+a)
-
+    delete_window()
+    create_window()
     get_va_msg()
 
 
@@ -57,6 +272,8 @@ def sendmail(ph_no, phonewindow):
         dict({'name': 'Jarvis', 'msg': "Email sent successfully to "+ph_no}))
     root.update()
     tt.talk("Email sent successfully to "+ph_no)
+    delete_window()
+    create_window()
     get_va_msg()
 
 
@@ -153,13 +370,6 @@ def delete_window():
 
 
 def create_window():
-    # contentwindow = canvas.create_window((4, 4), window=second_frame,
-    #                                      anchor="nw", width=500)
-    # second_frame.bind("<Configure>", lambda event,
-    #                   canvas=canvas: onFrameConfigure(canvas))
-    # img = Image.open("avatar.jpg")
-    # img = img.resize((50, 50))
-    # avatarimg = ImageTk.PhotoImage(img)
     avatarframe = Frame(frame1, bg='gray26')
     avatar = Label(avatarframe, image=avatarimg, anchor=E,
                    height=50, width=50, padx=5, pady=5, bg="gray26", justify=RIGHT)
@@ -173,9 +383,28 @@ def get_va_msg():
     if(msg['msg'] == ""):
         get_va_msg()
     elif(msg['msg'] == "send a message in whatsapp"):
+        show_msg(msg)
+        root.update()
         phone_window()
     elif(msg['msg'] == "send a mail") or (msg['msg'] == "send a email"):
+        show_msg(msg)
+        root.update()
         mail_window()
+    elif "create an event" in msg['msg']:
+        show_msg(msg)
+        root.update()
+        date = tt.get_date(msg['msg'])
+        createevent_google(date)
+    elif 'rest' in msg['msg'] or 'sleep' in msg['msg']:
+        show_msg(msg)
+        root.update()
+        reply = 'Okay Guys I will just take a nap, Call me whenever u need my help'
+        show_msg(dict(
+            {'name': "Jarvis", 'msg': "Okay Guys I will just take a nap, Call me whenever u need my help"}))
+        root.update()
+        tt.talk(reply)
+        time.sleep(1)
+        exit()
     else:
         show_msg(msg)
         root.update()
