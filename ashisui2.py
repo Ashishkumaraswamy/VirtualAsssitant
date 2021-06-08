@@ -359,10 +359,6 @@ def phone_window():
     tt.talk("Enter the Phone Number")
 
 
-def myfucntion():
-    canvas.configure(scrollregion=canvas.bbox("all"))
-
-
 def delete_window():
     for widgets in frame1.winfo_children():
         widgets.destroy()
