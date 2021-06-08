@@ -7,6 +7,7 @@ import pywhatkit
 import re
 import time
 import pytz
+import requests
 regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
 
@@ -49,6 +50,62 @@ def postevent(titleentry, descentry, startentry, endentry, phone_window):
     print(event)
     tt.create_event(event)
     tt.talk("Event created successfully and added to google calendar")
+    delete_window()
+    create_window()
+    get_va_msg()
+
+
+def note(text):
+    date = datetime.datetime.now()
+    file_name = str(date).replace(":", "-")+"-note.txt"
+    with open(file_name, "w") as f:
+        f.write(text)
+
+    tt.subprocess.Popen(['notepad.exe', file_name])
+
+
+def run_note():
+    tt.talk("What would you like me to write down?")
+    show_msg(
+        dict({'name': 'Jarvis', 'msg': "What would you like me to write down?"}))
+    root.update()
+    while True:
+        note_text = tt.first_1()
+        if(note_text['msg'] != ""):
+            break
+    note(note_text['msg'])
+    show_msg(dict({'name': 'Jarvis', 'msg': "I've made a note of that."}))
+    root.update()
+    delete_window()
+    create_window()
+    get_va_msg()
+
+
+def weather():
+    api_key = "d97dd2dfd8d75bd9862f7f4e71096463"
+    base_url = "http://api.openweathermap.org/data/2.5/weather"
+    show_msg(
+        dict({'name': 'Jarvis', 'msg': "What is the city name"}))
+    root.update()
+    tt.talk("What is the city name?")
+    while True:
+        city_name = tt.first_1()
+        if(city_name['msg'] != ""):
+            break
+    show_msg(city_name)
+    root.update()
+    parm = {'APPID': api_key, 'q': city_name['msg'], 'units': 'Metric'}
+    response = requests.get(base_url, params=parm)
+    weather = response.json()
+    if weather["cod"] != "404":
+        reply = "Name: "+str(weather['name']) + "\n"
+        reply += "Conditions: " + \
+            str(weather['weather'][0]['description']) + "\n"
+        reply += "Temperature in celsius:"+str(weather['main']['temp'])
+    else:
+        reply = "City Not Found"
+    show_msg(dict({'name': 'Jarvis', 'msg': reply}))
+    root.update()
     delete_window()
     create_window()
     get_va_msg()
@@ -221,7 +278,8 @@ def createevent_google(date):
 
 
 def sendwhatsappmsg(ph_no, phonewindow):
-    phonewindow.destroy()
+    if phonewindow != None:
+        phonewindow.destroy()
     show_msg(dict({'name': 'You', 'msg': ph_no}))
     show_msg(dict({'name': 'Jarvis', 'msg': "What is the message?"}))
     root.update()
@@ -236,8 +294,17 @@ def sendwhatsappmsg(ph_no, phonewindow):
     show_msg(
         dict({'name': 'Jarvis', 'msg': "Your message will be sent shortly to "+ph_no}))
     root.update()
-    pywhatkit.sendwhatmsg(f"+91{ph_no}", note_text['msg'], int(datetime.datetime.now(
-    ).strftime("%H")), int(datetime.datetime.now().strftime("%M"))+a)
+    try:
+        pywhatkit.sendwhatmsg(f"+91{ph_no}", note_text['msg'], int(datetime.datetime.now(
+        ).strftime("%H")), int(datetime.datetime.now().strftime("%M"))+a, wait_time=10)
+    except pywhatkit.exceptions.CallTimeException:
+        tt.talk("Message took long time to send. Please try again")
+        show_msg(dict(
+            {'name': 'Jarvis', 'msg': "Message took long time to send. Please try again"}))
+        time.sleep(1)
+        delete_window()
+        create_window()
+        sendwhatsappmsg(ph_no, phonewindow)
     delete_window()
     create_window()
     get_va_msg()
@@ -394,6 +461,14 @@ def get_va_msg():
         tt.talk(reply)
         time.sleep(1)
         exit()
+    elif "weather" in msg['msg']:
+        show_msg(msg)
+        root.update()
+        weather()
+    elif 'make a note' in msg['msg'] or 'open notepad' in msg['msg'] or 'write this down' in msg['msg']:
+        show_msg(msg)
+        root.update()
+        run_note()
     else:
         show_msg(msg)
         root.update()

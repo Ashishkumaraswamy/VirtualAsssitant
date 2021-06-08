@@ -23,6 +23,7 @@ import psutil
 import pyautogui
 from PyDictionary import PyDictionary
 from calculator.simple import SimpleCalculator
+import gui
 
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
@@ -202,44 +203,6 @@ def first_1():
     return dict({"name": "You", "msg": command})
 
 
-def note(text):
-    date = datetime.datetime.now()
-    file_name = str(date).replace(":", "-")+"-note.txt"
-    with open(file_name, "w") as f:
-        f.write(text)
-
-    subprocess.Popen(['notepad.exe', file_name])
-
-
-def run_note():
-    talk("What would you like me to write down?")
-    note_text = first_1()
-    note(note_text['msg'])
-    return "I've made a note of that."
-
-
-def whats_run():
-    while(True):
-        talk("can you tell the mobile number?")
-        ph_no = first_1()
-        ph_no = ph_no['msg']
-        ph_no = ph_no.replace(' ', '')
-        print(ph_no)
-        if(len(ph_no) == 10 and ph_no.isnumeric() == True):
-            break
-
-    talk("What is the message?")
-    note_text = first_1()
-    a = 1
-    if(a == 60 and int(datetime.datetime.now().strftime("%S")) <= 40):
-        a = 0
-
-    pywhatkit.sendwhatmsg(f"+91{ph_no}", note_text['msg'], int(datetime.datetime.now(
-    ).strftime("%H")), int(datetime.datetime.now().strftime("%M"))+a, wait_time=10)
-
-    return "I've sent the message to this phone number :"+ph_no
-
-
 def run_alexa(command):
     if command == "No command recieved":
         reply = "No command recieved"
@@ -264,27 +227,6 @@ def run_alexa(command):
         song = command.replace('play', '')
         reply = 'playing ' + song
         pywhatkit.playonyt(song)
-    elif "weather" in command:
-        api_key = "d97dd2dfd8d75bd9862f7f4e71096463"
-        base_url = "http://api.openweathermap.org/data/2.5/weather"
-
-        while True:
-            talk("City name:")
-            city_name = first_1()
-            city_name = city_name['msg']
-            if(city_name != ""):
-                break
-        parm = {'APPID': api_key, 'q': city_name, 'units': 'Metric'}
-        response = requests.get(base_url, params=parm)
-        weather = response.json()
-        if weather["cod"] != "404":
-            reply = "Name: "+str(weather['name']) + "\n"
-            reply += "Conditions: " + \
-                str(weather['weather'][0]['description']) + "\n"
-            reply += "Temperature (°C):"+str(weather['main']['temp'])
-        else:
-            reply = "City Not Found"
-        print(reply)
 
     elif 'battery percentage' in command or 'battery info' in command or 'battery information' in command:
         battery_data = psutil.sensors_battery()
@@ -307,15 +249,9 @@ def run_alexa(command):
         service = authorize_google()
         date = get_date(command)
         reply = get_events(date, service)
-    elif 'open notepad' in command:
-        reply = run_note()
     elif 'open spotify' in command:
         subprocess.Popen(['spotify.exe'])
         reply = "Opened Spotify application"
-    elif 'make a note' in command:
-        reply = run_note()
-    elif 'write this down' in command:
-        reply = run_note()
 
     elif 'calculate' in command:
         inp = command.replace('calculate', '')
@@ -406,8 +342,6 @@ def run_alexa(command):
     elif "i love you" in command:
         reply = "It's hard to understand"
 
-    elif 'send a message in whatsapp' in command:
-        reply = "Message sending failure"
     elif 'find the meaning of' in command:
         inp = command.replace('find the meaning of', '')
         inp = inp.replace(' ', '')
@@ -422,8 +356,16 @@ def run_alexa(command):
         reply = 'Okay Guys I will just take a nap, Call me whenever u need my help'
         exit()
     else:
+        gui.show_msg(dict(
+            {'name': 'Jarvis', 'msg': "I can search the web for you, Do you want to continue?"}))
+        gui.root.update()
         talk("I can search the web for you, Do you want to continue?")
-        ans = first_1()
+        while(True):
+            ans = first_1()
+            if ans['msg'] != "":
+                break
+        gui.show_msg(ans)
+        gui.root.update()
         ans = ans['msg']
         if 'yes' in str(ans) or 'yeah' in str(ans):
             pywhatkit.search(command)
