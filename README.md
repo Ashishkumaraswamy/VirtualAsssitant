@@ -1,1 +1,1 @@
-# VirtualAsssitant
+J.A.R.V.I.S, a GUI based virtual Assistant desktop application built in python using the pyttsx3,speech_recognition modules etc. that allows the user to provide commands and interact with the assistant. The virtual assistant performs actions such as sending a whatsapp message,sending mails, playing videos on youtube,making a google search, adding events to the google calendar, notifying the schedules and several more features.
